@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <title>Демо – Калкулатор за оферти</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background: #0b0f1a;
+      color: #ffffff;
+    }
+
+    header {
+      padding: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    header a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px 120px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+
+    h1 {
+      font-size: 40px;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #cfd6ff;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background: #121833;
+      border-radius: 20px;
+      padding: 32px;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-size: 13px;
+      opacity: 0.8;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      background: #0b0f1a;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 12px;
+      color: #ffffff;
+      margin-bottom: 18px;
+      font-size: 14px;
+    }
+
+    .materials-header,
+    .material-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .materials-header {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-bottom: 10px;
+    }
+
+    .material-total {
+      font-weight: 600;
+    }
+
+    .add-material {
+      margin-top: 10px;
+      background: transparent;
+      border: 1px dashed rgba(255,255,255,0.4);
+      color: #ffffff;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button.main {
+      width: 100%;
+      background: linear-gradient(135deg, #6d7cff, #9f7cff);
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .result {
+      background: #121833;
+      border-radius: 20px;
+      padding: 32px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      margin: 20px 0;
+    }
+
+    .total {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    @media (max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <a href="/">← Начало</a>
+</header>
+
+<div class="container">
+
+  <!-- LEFT -->
+  <div>
+    <h1>Демо калкулатор</h1>
+    <p class="subtitle">
+      Реално изчисление чрез бекенда
+    </p>
+
+    <div class="card">
+      <label>Описание</label>
+      <input id="описание" type="text" />
+
+      <label>Сложност</label>
+      <select id="трудност">
+        <option value="лесна">лесна</option>
+        <option value="средна">средна</option>
+        <option value="трудна">трудна</option>
+        <option value="експертна">експертна</option>
+      </select>
+
+      <label>Часове</label>
+      <input id="часове" type="number" />
+
+      <label>Разстояние (км)</label>
+      <input id="разстояние" type="number" />
+    </div>
+
+    <div class="card">
+      <h3>Материали</h3>
+
+      <div class="materials-header">
+        <div>Материал</div>
+        <div>Цена</div>
+        <div>Количество</div>
+        <div>Общо</div>
+      </div>
+
+      <div id="materials">
+        <div class="material-row">
+          <input type="text" />
+          <input type="number" />
+          <input type="number" />
+          <div class="material-total">0 €</div>
+        </div>
+      </div>
+
+      <button type="button" class="add-material" onclick="addMaterial()">
+        + Добави материал
+      </button>
+    </div>
+
+    <button class="main" onclick="calculate()">Изчисли оферта</button>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="result">
+    <h2>Резултат</h2>
+
+    <div id="output">
+      <p>Изчислете оферта, за да видите резултат.</p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function addMaterial() {
+    const row = document.createElement("div");
+    row.className = "material-row";
+    row.innerHTML = `
+      <input type="text" />
+      <input type="number" />
+      <input type="number" />
+      <div class="material-total">0 €</div>
+    `;
+    document.getElementById("materials").appendChild(row);
+  }
+
+  function calculate() {
+    const materials = [];
+    document.querySelectorAll(".material-row").forEach(row => {
+      const inputs = row.querySelectorAll("input");
+      if (!inputs[0].value) return;
+
+      materials.push({
+        име: inputs[0].value,
+        единична_цена: Number(inputs[1].value),
+        количество: Number(inputs[2].value)
+      });
+    });
+
+    const payload = {
+      описание: document.getElementById("описание").value,
+      трудност: document.getElementById("трудност").value,
+      часове: Number(document.getElementById("часове").value),
+      разстояние: Number(document.getElementById("разстояние").value),
+      материали: materials
+    };
+
+    fetch("/api/изчисли", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("output").innerHTML = `
+        <div class="row"><span>Материали</span><strong>${data.разходи.материали} €</strong></div>
+        <div class="row"><span>Труд</span><strong>${data.разходи.труд} €</strong></div>
+        <div class="row"><span>Данък труд</span><strong>${data.разходи.данък_труд} €</strong></div>
+        <div class="row"><span>Транспорт</span><strong>${data.разходи.транспорт} €</strong></div>
+        <div class="row"><span>Общи разходи</span><strong>${data.разходи.общи_разходи} €</strong></div>
+        <div class="divider"></div>
+        <div class="row"><span>Печалба</span><strong>${data.оферта.печалба} €</strong></div>
+        <div class="row total"><span>Крайна оферта</span><strong>${data.оферта.крайна_цена} €</strong></div>
+      `;
+    });
+  }
+</script>
+
+</body>
+</html>
+
