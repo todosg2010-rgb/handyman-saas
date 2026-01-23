@@ -1,6 +1,4 @@
 from flask import Flask, request, jsonify, send_file
-from pricing_engine import изчисли_оферта
-import os
 
 app = Flask(__name__)
 app.json.ensure_ascii = False
@@ -20,9 +18,10 @@ def demo_page():
     return send_file("demo.html")
 
 
-# =========================
-# IMAGE ROUTE (NO static/)
-# =========================
+@app.route("/kak-raboti", methods=["GET"])
+def kak_raboti_page():
+    return send_file("how-it-works.html")
+
 
 @app.route("/ui-preview.png", methods=["GET"])
 def ui_preview():
@@ -33,39 +32,37 @@ def ui_preview():
 # API ROUTES
 # =========================
 
-@app.route("/api/изчисли", methods=["POST"])
+@app.route("/api/izchisli", methods=["POST"])
 def api_izchisli():
-    данни = request.get_json()
+    data = request.get_json()
 
-    if not данни:
-        return jsonify({"грешка": "Липсва JSON тяло"}), 400
+    if not data:
+        return jsonify({"greshka": "Lipsva JSON tyalo"}), 400
 
-    задължителни = ["описание", "трудност", "часове", "разстояние", "материали"]
-    for поле in задължителни:
-        if поле not in данни:
-            return jsonify({"грешка": f"Липсва поле: {поле}"}), 400
+    required = ["opisanie", "trudnost", "chasove", "razstoyanie", "materiali"]
+    for field in required:
+        if field not in data:
+            return jsonify({"greshka": f"Lipsva pole: {field}"}), 400
 
     try:
-        резултат = изчисли_оферта(данни)
-        return jsonify(резултат), 200
+        from pricing_engine import izchisli_oferta
+        result = izchisli_oferta(data)
+        return jsonify(result), 200
     except Exception as e:
         return jsonify({
-            "грешка": "Грешка при изчисление",
-            "детайли": str(e)
+            "greshka": "Greshka pri izchislenie",
+            "detayli": str(e)
         }), 500
-
-@app.route("/dashboard")
-def dashboard():
-    return send_from_directory(
-        os.path.dirname(__file__),
-        "dashboard.html"
-    )
 
 
 # =========================
-# START SERVER
+# RENDER ENTRY POINT
 # =========================
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    app.run(
+        host="0.0.0.0",
+        port=10000,
+        debug=False
+    )
 
