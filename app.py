@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, send_file
 from pricing_engine import изчисли_оферта
 
 app = Flask(__name__)
-app.json.ensure_ascii = False  # Bulgarian characters support
+app.json.ensure_ascii = False  # Bulgarian UTF-8 support
 
 
 # =========================
@@ -20,7 +20,7 @@ def demo():
     return send_file("demo.html")
 
 
-# Bulgarian-friendly route + English alias (both work)
+# Bulgarian + English routes (both work)
 @app.route("/kak-raboti")
 @app.route("/how-it-works")
 def kak_raboti():
@@ -28,7 +28,7 @@ def kak_raboti():
 
 
 # =========================
-# IMAGE ROUTE (NO /static)
+# IMAGE ROUTE (NO STATIC)
 # =========================
 
 @app.route("/ui-preview.png")
