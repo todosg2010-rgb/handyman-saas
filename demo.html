@@ -8,137 +8,154 @@
   <style>
     body {
       margin: 0;
-      font-family: Inter, system-ui, Arial, sans-serif;
-      background:
-        radial-gradient(1200px 600px at 15% -10%, #1e293b, transparent),
-        radial-gradient(900px 500px at 85% 10%, #0f766e, transparent),
-        #020617;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #020617 100%);
       color: #e5e7eb;
     }
 
     header {
-      padding: 24px 40px;
+      padding: 28px 48px;
+      display: flex;
+      align-items: center;
     }
 
     header a {
-      color: #c7d2fe;
+      color: #a5b4fc;
       text-decoration: none;
       font-weight: 600;
+      font-size: 14px;
     }
 
     .page {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 40px 20px 80px;
+      padding: 60px 32px 120px;
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 60px;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
       align-items: center;
+      margin-bottom: 80px;
     }
 
     h1 {
-      font-size: 44px;
-      font-weight: 800;
-      margin-bottom: 16px;
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
     }
 
     .subtitle {
-      color: #94a3b8;
       font-size: 18px;
+      color: #9ca3af;
       max-width: 520px;
+      line-height: 1.6;
     }
 
-    .card {
-      background: rgba(2,6,23,0.92);
-      border-radius: 24px;
-      border: 1px solid #1e293b;
-      box-shadow: 0 40px 90px rgba(0,0,0,0.55);
-      padding: 32px;
+    .glass {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.06);
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+      padding: 36px;
     }
 
     label {
       font-size: 13px;
       font-weight: 600;
-      color: #cbd5f5;
-      display: block;
+      color: #c7d2fe;
       margin-bottom: 6px;
+      display: block;
     }
 
     input, select {
       width: 100%;
-      padding: 12px 14px;
-      border-radius: 12px;
-      border: 1px solid #1e293b;
-      background: #020617;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(2,6,23,0.8);
       color: #fff;
       font-size: 14px;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #6366f1;
     }
 
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 20px;
     }
 
-    .full { grid-column: 1 / -1; }
+    .full {
+      grid-column: 1 / -1;
+    }
 
     .materials {
-      margin-top: 24px;
+      margin-top: 32px;
     }
 
     .material-row {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
     button {
-      border-radius: 14px;
-      border: none;
-      padding: 16px;
-      font-weight: 700;
-      cursor: pointer;
       width: 100%;
+      padding: 18px;
+      border-radius: 16px;
+      border: none;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      letter-spacing: 0.02em;
     }
 
     .primary {
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      background: linear-gradient(135deg, #6366f1, #7c3aed);
       color: white;
-      margin-top: 20px;
+      margin-top: 28px;
+      box-shadow: 0 10px 40px rgba(99,102,241,0.35);
     }
 
     .secondary {
-      background: #020617;
-      color: #cbd5f5;
-      border: 1px solid #1e293b;
-      margin-top: 10px;
+      background: transparent;
+      color: #c7d2fe;
+      border: 1px dashed rgba(255,255,255,0.12);
+      margin-top: 12px;
     }
 
     .result {
-      margin-top: 32px;
-      padding: 24px;
-      border-radius: 20px;
-      border: 1px solid #1e293b;
-      background: #020617;
+      margin-top: 40px;
+      padding: 32px;
+      border-radius: 22px;
+      background: rgba(2,6,23,0.9);
+      border: 1px solid rgba(255,255,255,0.08);
     }
 
     .price {
-      font-size: 36px;
-      font-weight: 800;
+      font-size: 44px;
+      font-weight: 900;
       color: #a5b4fc;
-      margin-bottom: 10px;
+      margin-bottom: 18px;
     }
 
     .line {
       display: flex;
       justify-content: space-between;
+      padding: 8px 0;
       font-size: 14px;
-      padding: 6px 0;
-      border-bottom: 1px solid #1e293b;
+      color: #d1d5db;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
     .line:last-child {
@@ -146,7 +163,7 @@
     }
 
     .muted {
-      color: #94a3b8;
+      color: #9ca3af;
     }
   </style>
 </head>
@@ -158,19 +175,18 @@
 </header>
 
 <div class="page">
-  <div class="hero">
 
-    <!-- LEFT -->
+  <div class="hero">
     <div>
-      <h1>Демо калкулатор</h1>
+      <h1>Оферти,<br>които работят</h1>
       <p class="subtitle">
-        Реално изчисление на оферта с пълен контрол върху разходи,
-        печалба и крайна цена.
+        Изчислявайте оферти с хирургическа точност.
+        Пълен контрол над разходи, марж и крайна цена —
+        за минути, не часове.
       </p>
     </div>
 
-    <!-- RIGHT -->
-    <div class="card">
+    <div class="glass">
       <div class="grid">
         <div class="full">
           <label>Описание</label>
@@ -209,6 +225,7 @@
       <div id="result" class="result" style="display:none;"></div>
     </div>
   </div>
+
 </div>
 
 <script>
@@ -260,14 +277,12 @@
 
     out.innerHTML = `
       <div class="price">${r.оферта.крайна_цена} €</div>
-
       <div class="line"><span>Материали</span><span>${r.разходи.материали} €</span></div>
       <div class="line"><span>Труд</span><span>${r.разходи.труд} €</span></div>
       <div class="line"><span>Данък труд</span><span>${r.разходи.данък_труд} €</span></div>
       <div class="line"><span>Транспорт</span><span>${r.разходи.транспорт} €</span></div>
       <div class="line"><span>Общи разходи</span><span>${r.разходи.общи_разходи} €</span></div>
-      <div class="line muted"><span>Себестойност</span><span>${r.разходи.себестойност} €</span></div>
-      <div class="line"><strong>Печалба</strong><strong>${r.оферта.печалба} €</strong></div>
+      <div class="line muted"><strong>Печалба</strong><strong>${r.оферта.печалба} €</strong></div>
     `;
   }
 </script>
