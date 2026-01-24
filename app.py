@@ -1,4 +1,3 @@
-import os
 from flask import Flask, request, jsonify, send_file
 
 app = Flask(__name__)
@@ -20,7 +19,7 @@ def demo_page():
 
 
 @app.route("/kak-raboti", methods=["GET"])
-def kak_raboti_page():
+def how_it_works_page():
     return send_file("how-it-works.html")
 
 
@@ -30,41 +29,69 @@ def ui_preview():
 
 
 # =========================
-# API ROUTES
+# API ROUTE
 # =========================
 
 @app.route("/api/izchisli", methods=["POST"])
 def api_izchisli():
-    data = request.get_json()
-
-    if not data:
-        return jsonify({"greshka": "Lipsva JSON tyalo"}), 400
-
-    required = ["opisanie", "trudnost", "chasove", "razstoyanie", "materiali"]
-    for field in required:
-        if field not in data:
-            return jsonify({"greshka": f"Lipsva pole: {field}"}), 400
-
     try:
-        from pricing_engine import izchisli_oferta
-        result = izchisli_oferta(data)
+        raw_data = request.get_json(force=True)
+
+        # ---- Normalize Bulgarian -> internal keys ----
+        key_map = {
+            "описание": "описание",
+            "трудност": "трудност",
+            "часове": "часове",
+            "разстояние": "разстояние",
+            "материали": "материали"
+        }
+
+        data = {}
+        for k, v in raw_data.items():
+            data[key_map.get(k, k)] = v
+
+        # ---- Validate required fields ----
+        required_fields = ["описание", "трудност", "часове", "разстояние", "материали"]
+        for field in required_fields:
+            if field not in data:
+                return jsonify({
+                    "грешка": f"Липсва поле: {field}"
+                }), 400
+
+        if not isinstance(data["материали"], list):
+            data["материали"] = []
+
+        # ---- Call pricing engine ----
+        from pricing_engine import изчисли_оферта
+        result = изчисли_оферта(data)
+
         return jsonify(result), 200
+
     except Exception as e:
         return jsonify({
-            "greshka": "Greshka pri izchislenie",
-            "detayli": str(e)
+            "грешка": "Вътрешна грешка в сървъра",
+            "детайли": str(e)
         }), 500
 
 
 # =========================
-# RENDER ENTRY POINT
+# HEALTH CHECK
 # =========================
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"}), 200
+
+
+# =========================
+# LOCAL DEV ONLY
+# =========================
+# Gunicorn ignores this on Render
+
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
     app.run(
-        host="0.0.0.0",
-        port=port,
-        debug=False
+        host="127.0.0.1",
+        port=5050,
+        debug=True
     )
 
