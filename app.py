@@ -3,10 +3,12 @@ from flask import Flask, request, jsonify, send_file
 from pricing_engine import изчисли_оферта
 
 app = Flask(__name__)
-app.json.ensure_ascii = False
+app.json.ensure_ascii = False  # Bulgarian characters support
 
 
-# ---------- PAGES ----------
+# =========================
+# PAGE ROUTES
+# =========================
 
 @app.route("/")
 def landing():
@@ -18,26 +20,34 @@ def demo():
     return send_file("demo.html")
 
 
+# Bulgarian-friendly route + English alias (both work)
+@app.route("/kak-raboti")
 @app.route("/how-it-works")
-def how_it_works():
+def kak_raboti():
     return send_file("how-it-works.html")
 
 
-# ---------- IMAGE (NO STATIC FOLDER) ----------
+# =========================
+# IMAGE ROUTE (NO /static)
+# =========================
 
 @app.route("/ui-preview.png")
-def ui_image():
+def ui_preview():
     return send_file("ui-preview.png", mimetype="image/png")
 
 
-# ---------- HEALTH ----------
+# =========================
+# HEALTH CHECK
+# =========================
 
 @app.route("/health")
 def health():
     return jsonify({"status": "ok"})
 
 
-# ---------- API ----------
+# =========================
+# API ROUTE
+# =========================
 
 @app.route("/api/izchisli", methods=["POST"])
 def izchisli():
@@ -46,19 +56,21 @@ def izchisli():
     if not data:
         return jsonify({"грешка": "Няма подадени данни"}), 400
 
-    required = ["описание", "трудност", "часове", "разстояние", "материали"]
-    for field in required:
+    required_fields = ["описание", "трудност", "часове", "разстояние", "материали"]
+    for field in required_fields:
         if field not in data:
             return jsonify({"грешка": f"Липсва поле: {field}"}), 400
 
     try:
         result = изчисли_оферта(data)
-        return jsonify(result)
+        return jsonify(result), 200
     except Exception as e:
         return jsonify({"грешка": str(e)}), 500
 
 
-# ---------- RUN ----------
+# =========================
+# RUN SERVER
+# =========================
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5050))
