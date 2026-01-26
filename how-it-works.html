@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8" />
+  <title>Как работи</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+      background: linear-gradient(180deg, #020617 0%, #020617 100%);
+      color: #e5e7eb;
+    }
+
+    header {
+      padding: 28px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header a {
+      color: #a5b4fc;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      margin-left: 20px;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 32px 140px;
+    }
+
+    h1 {
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .subtitle {
+      font-size: 19px;
+      color: #9ca3af;
+      max-width: 620px;
+      line-height: 1.6;
+    }
+
+    .steps {
+      margin-top: 100px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+
+    .step {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(18px);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.06);
+      padding: 36px;
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .step-number {
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      color: #818cf8;
+      margin-bottom: 14px;
+    }
+
+    .step-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .step-text {
+      font-size: 15px;
+      color: #cbd5f5;
+      line-height: 1.6;
+    }
+
+    .cta {
+      margin-top: 120px;
+      text-align: center;
+    }
+
+    .cta h2 {
+      font-size: 40px;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    .cta p {
+      font-size: 18px;
+      color: #9ca3af;
+      margin-bottom: 32px;
+    }
+
+    .cta a {
+      display: inline-block;
+      padding: 18px 40px;
+      border-radius: 18px;
+      font-weight: 800;
+      text-decoration: none;
+      background: linear-gradient(135deg, #6366f1, #7c3aed);
+      color: white;
+      box-shadow: 0 12px 40px rgba(99,102,241,0.35);
+    }
+
+    @media (max-width: 900px) {
+      .steps {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <strong>HandyMan SaaS</strong>
+  <nav>
+    <a href="/">Начало</a>
+    <a href="/demo">Демо</a>
+  </nav>
+</header>
+
+<div class="page">
+
+  <h1>Как работи</h1>
+  <p class="subtitle">
+    Създадохме софтуер, който превръща хаотичното ценообразуване
+    в ясен, професионален и печеливш процес —
+    без Excel, без грешки и без губене на време.
+  </p>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-number">СТЪПКА 01</div>
+      <div class="step-title">Въвеждате детайлите</div>
+      <div class="step-text">
+        Описвате услугата, избирате трудност, часове,
+        разстояние и материали. Всичко е прозрачно и логично.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">СТЪПКА 02</div>
+      <div class="step-title">Софтуерът изчислява</div>
+      <div class="step-text">
+        Калкулаторът отчита труд, данъци, транспорт,
+        общи разходи и печалба — автоматично и без грешки.
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-number">СТЪПКА 03</div>
+      <div class="step-title">Изпращате оферта</div>
+      <div class="step-text">
+        Получавате ясна крайна цена и пълна разбивка,
+        която вдъхва доверие и изглежда професионално.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cta">
+    <h2>Готов ли сте да пробвате?</h2>
+    <p>Вижте как изглежда една реална оферта за секунди.</p>
+    <a href="/demo">Опитай демо</a>
+  </div>
+
+</div>
+
+</body>
+</html>
+
