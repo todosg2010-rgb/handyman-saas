@@ -20,7 +20,7 @@ def demo():
     return send_file("demo.html")
 
 
-# Bulgarian + English routes (both work)
+# Bulgarian + English routes
 @app.route("/kak-raboti")
 @app.route("/how-it-works")
 def kak_raboti():
@@ -28,7 +28,7 @@ def kak_raboti():
 
 
 # =========================
-# IMAGE ROUTE (NO STATIC)
+# STATIC IMAGE
 # =========================
 
 @app.route("/ui-preview.png")
@@ -42,7 +42,7 @@ def ui_preview():
 
 @app.route("/health")
 def health():
-    return jsonify({"status": "ok"})
+    return jsonify({"status": "ok"}), 200
 
 
 # =========================
@@ -51,12 +51,13 @@ def health():
 
 @app.route("/api/izchisli", methods=["POST"])
 def izchisli():
-    data = request.get_json()
+    data = request.get_json(silent=True)
 
     if not data:
         return jsonify({"грешка": "Няма подадени данни"}), 400
 
-    required_fields = ["описание", "трудност", "часове", "разстояние", "материали"]
+    # Required for Engine v1
+    required_fields = ["описание", "часове", "разстояние", "материали"]
     for field in required_fields:
         if field not in data:
             return jsonify({"грешка": f"Липсва поле: {field}"}), 400
@@ -65,7 +66,8 @@ def izchisli():
         result = изчисли_оферта(data)
         return jsonify(result), 200
     except Exception as e:
-        return jsonify({"грешка": str(e)}), 500
+        # Fail safe for demo
+        return jsonify({"грешка": "Вътрешна грешка"}), 500
 
 
 # =========================
