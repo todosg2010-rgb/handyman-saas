@@ -1,9 +1,37 @@
 import os
 from flask import Flask, request, jsonify, send_file
+
+# -------------------------
+# Flask + DB
+# -------------------------
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+# -------------------------
+# Business logic
+# -------------------------
 from pricing_engine import изчисли_оферта
 
+# -------------------------
+# App setup
+# -------------------------
 app = Flask(__name__)
 app.json.ensure_ascii = False  # Bulgarian UTF-8 support
+
+# -------------------------
+# Database config
+# -------------------------
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv(
+    "DATABASE_URL",
+    "sqlite:///local.db"
+)
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+# IMPORTANT: load models so Flask-Migrate sees them
+import models  # noqa: E402
 
 
 # =========================
@@ -28,7 +56,7 @@ def kak_raboti():
 
 
 # =========================
-# STATIC IMAGE
+# IMAGE ROUTE (NO STATIC)
 # =========================
 
 @app.route("/ui-preview.png")
@@ -42,21 +70,20 @@ def ui_preview():
 
 @app.route("/health")
 def health():
-    return jsonify({"status": "ok"}), 200
+    return jsonify({"status": "ok"})
 
 
 # =========================
-# API ROUTE
+# API: PRICING ENGINE
 # =========================
 
 @app.route("/api/izchisli", methods=["POST"])
 def izchisli():
-    data = request.get_json(silent=True)
+    data = request.get_json()
 
     if not data:
         return jsonify({"грешка": "Няма подадени данни"}), 400
 
-    # Required for Engine v1
     required_fields = ["описание", "часове", "разстояние", "материали"]
     for field in required_fields:
         if field not in data:
@@ -66,8 +93,7 @@ def izchisli():
         result = изчисли_оферта(data)
         return jsonify(result), 200
     except Exception as e:
-        # Fail safe for demo
-        return jsonify({"грешка": "Вътрешна грешка"}), 500
+        return jsonify({"грешка": str(e)}), 500
 
 
 # =========================
@@ -77,4 +103,3 @@ def izchisli():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5050))
     app.run(host="0.0.0.0", port=port)
-
