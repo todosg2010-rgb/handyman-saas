@@ -1,155 +1,116 @@
 from typing import Dict, List
 
-ENGINE_VERSION = "1.4"
-
-DEFAULTS = {
-    "часова_ставка": 45.0,
-    "данък": 0.20,
-    "общи_разходи": 0.10,
-    "цена_на_км": 1.20,
-    "такса_посещение": 15.0,
-    "печалба_процент": 30.0  # MARKUP % on cost
+SETTINGS = {
+    "transport_per_km": 1.20,
+    "visit_fee": 15.0,
+    "min_offer": 120.0
 }
 
+def изчисли_оферта(data: Dict) -> Dict:
+    description = data.get("description", "")
+    hours = float(data.get("hours", 0))
+    hourly_rate = float(data.get("hourly_rate", 0))
+    profit_percent = float(data.get("profit_percent", 0))
+    distance = float(data.get("distance", 0))
 
-def generate_client_message(
-    описание: str,
-    труд: float,
-    материали: float,
-    транспорт: float,
-    крайна_цена: float
-) -> str:
-    """
-    Generates a full, transparent, ready-to-send client message.
-    Suitable for Viber / WhatsApp.
-    """
+    input_materials = data.get("materials", [])
 
-    return f"""Здравейте!
+    # -----------------------
+    # MATERIALS COST
+    # -----------------------
+    materials_cost = 0.0
+    materials: List[Dict] = []
 
-Изготвих оферта за:
-{описание}
+    for m in input_materials:
+        price = float(m.get("unit_price", 0))
+        qty = float(m.get("quantity", 0))
+        total = round(price * qty, 2)
 
-Разбивка на цената:
-• Труд: {труд:.2f} €
-• Материали: {материали:.2f} €
-• Транспорт: {транспорт:.2f} €
-
-Крайна цена: {крайна_цена:.2f} €
-
-Цената включва всички разходи.
-Ако имате въпроси – насреща съм.
-"""
-
-
-def изчисли_оферта(данни: Dict, настройки: Dict = DEFAULTS) -> Dict:
-    # -------- Inputs --------
-    описание = данни.get("описание", "строително-монтажни работи")
-    часове = float(данни.get("часове", 0))
-    разстояние = float(данни.get("разстояние", 0))
-    материали_вход = данни.get("материали", [])
-
-    часова_ставка = float(
-        данни.get("часова_ставка", настройки["часова_ставка"])
-    )
-
-    печалба_процент = float(
-        данни.get("печалба_процент", настройки["печалба_процент"])
-    )
-
-    # -------- Materials --------
-    материали: List[Dict] = []
-    общо_материали = 0.0
-
-    for m in материали_вход:
-        име = m.get("име", "Материал")
-        единична_цена = float(m.get("единична_цена", 0))
-        количество = float(m.get("количество", 0))
-
-        стойност = round(единична_цена * количество, 2)
-        общо_материали += стойност
-
-        материали.append({
-            "име": име,
-            "количество": количество,
-            "единична_цена": единична_цена,
-            "стойност": стойност
+        materials_cost += total
+        materials.append({
+            "name": m.get("name"),
+            "unit_price": price,
+            "quantity": qty,
+            "total_price": total
         })
 
-    # -------- Labor --------
-    труд = round(часове * часова_ставка, 2)
-    данък_труд = round(труд * настройки["данък"], 2)
-
-    # -------- Transport --------
-    транспорт = round(
-        настройки["такса_посещение"] +
-        разстояние * настройки["цена_на_км"],
-        2
+    # -----------------------
+    # TRANSPORT COST
+    # -----------------------
+    transport = round(
+        SETTINGS["visit_fee"] + distance * SETTINGS["transport_per_km"], 2
     )
 
-    # -------- Overhead --------
-    общи_разходи = round(
-        (общо_материали + труд) * настройки["общи_разходи"],
-        2
+    # -----------------------
+    # LABOR INCOME (NOT COST)
+    # -----------------------
+    labor_income = round(hours * hourly_rate, 2)
+
+    # -----------------------
+    # BASE COST (REAL EXPENSES)
+    # -----------------------
+    base_cost = round(materials_cost + transport, 2)
+
+    # -----------------------
+    # EXTRA PROFIT
+    # -----------------------
+    extra_profit = round(
+        (base_cost + labor_income) * (profit_percent / 100), 2
     )
 
-    # -------- COST --------
-    себестойност = round(
-        общо_материали +
-        труд +
-        данък_труд +
-        транспорт +
-        общи_разходи,
-        2
+    # -----------------------
+    # FINAL PRICE
+    # -----------------------
+    final_price = round(
+        base_cost + labor_income + extra_profit, 2
     )
 
-    # -------- PROFIT (MARKUP %) --------
-    печалба = round(
-        себестойност * (печалба_процент / 100),
-        2
+    if final_price < SETTINGS["min_offer"]:
+        final_price = SETTINGS["min_offer"]
+
+    # -----------------------
+    # REAL PROFIT
+    # -----------------------
+    real_profit = round(labor_income + extra_profit, 2)
+
+    margin = round((real_profit / final_price) * 100, 2) if final_price else 0
+
+    # -----------------------
+    # CLIENT MESSAGE
+    # -----------------------
+    client_message = (
+        f"Здравейте,\n\n"
+        f"Относно \"{description}\":\n\n"
+        f"Материали: {materials_cost:.2f} €\n"
+        f"Труд ({hours} ч. × {hourly_rate} €): {labor_income:.2f} €\n"
+        f"Транспорт: {transport:.2f} €\n\n"
+        f"Крайна цена: {final_price:.2f} €\n\n"
+        f"Поздрави,"
     )
 
-    крайна_цена = round(
-        себестойност + печалба,
-        2
-    )
-
-    # -------- CLIENT MESSAGE --------
-    клиентско_съобщение = generate_client_message(
-        описание=описание,
-        труд=труд,
-        материали=общо_материали,
-        транспорт=транспорт,
-        крайна_цена=крайна_цена
-    )
-
-    # -------- OUTPUT --------
     return {
-        "engine_version": ENGINE_VERSION,
+        "description": description,
+        "hours": hours,
+        "hourly_rate": hourly_rate,
+        "profit_percent": profit_percent,
+        "distance": distance,
 
-        # Internal (DB / analytics / owner only)
-        "internal": {
-            "себестойност": себестойност,
-            "печалба": печалба,
-            "марж_процент": round(
-                (печалба / себестойност) * 100, 2
-            ) if себестойност else 0
+        "materials": materials,
+
+        "costs": {
+            "materials": materials_cost,
+            "transport": transport,
+            "base_cost": base_cost
         },
 
-        # Client-facing (safe to send)
-        "client": {
-            "препоръчителна_цена": крайна_цена,
-            "съобщение": клиентско_съобщение
+        "income": {
+            "labor": labor_income,
+            "extra_profit": extra_profit,
+            "total_profit": real_profit,
+            "margin_percent": margin
         },
 
-        # Detailed costs (internal display)
-        "разходи": {
-            "материали": round(общо_материали, 2),
-            "труд": труд,
-            "данък_труд": данък_труд,
-            "транспорт": транспорт,
-            "общи_разходи": общи_разходи
-        },
-
-        "материали": материали,
-        "описание": описание
+        "final_price": final_price,
+        "client_message": client_message,
+        "engine_version": "v3.0"
     }
