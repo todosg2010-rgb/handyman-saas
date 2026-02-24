@@ -2,332 +2,1210 @@
 <html lang="bg">
 <head>
 <meta charset="UTF-8">
-<title>Вътрешен калкулатор – TavSoft</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Вътрешен калкулатор | TavSoft</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 
 <style>
 :root {
   --blue1: #60a5fa;
   --blue2: #818cf8;
   --blue3: #38bdf8;
-  --blueGlow: rgba(99,102,241,0.6);
+  --purple: #a78bfa;
+  --blueGlow: rgba(99,102,241,0.5);
   --bg: #020617;
+  --card-bg: rgba(15,23,42,0.7);
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --success: #22c55e;
+  --warning: #f59e0b;
 }
 
-* { box-sizing: border-box; }
+* { 
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  min-height: 100%;
+}
 
 body {
-  margin: 0;
-  font-family: Inter, system-ui, sans-serif;
-  color: #e5e7eb;
-  background:
-    radial-gradient(900px at 15% 10%, rgba(99,102,241,0.35), transparent 40%),
-    radial-gradient(700px at 85% 20%, rgba(56,189,248,0.25), transparent 45%),
-    radial-gradient(700px at 50% 80%, rgba(99,102,241,0.25), transparent 40%),
-    var(--bg);
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: 
+    radial-gradient(1200px 900px at 0% 0%, rgba(99,102,241,0.4), transparent 50%),
+    radial-gradient(1000px 800px at 100% 0%, rgba(56,189,248,0.3), transparent 45%),
+    radial-gradient(900px 700px at 100% 100%, rgba(139,92,246,0.25), transparent 40%),
+    radial-gradient(800px 600px at 0% 100%, rgba(30,58,138,0.35), transparent 45%),
+    linear-gradient(180deg, #020617 0%, #0f172a 50%, #020617 100%);
+  background-attachment: fixed;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
+
+/* Animated background orbs */
+.bg-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.5;
+  animation: float 20s ease-in-out infinite;
+}
+
+.orb-1 {
+  width: 500px;
+  height: 500px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.4), rgba(59,130,246,0.2));
+  top: -10%;
+  left: -10%;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(135deg, rgba(56,189,248,0.35), rgba(99,102,241,0.2));
+  top: 30%;
+  right: -5%;
+  animation-delay: -7s;
+}
+
+.orb-3 {
+  width: 450px;
+  height: 450px;
+  background: linear-gradient(135deg, rgba(139,92,246,0.3), rgba(99,102,241,0.2));
+  bottom: -10%;
+  left: 20%;
+  animation-delay: -14s;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(40px, 30px) scale(1.02); }
+}
+
+/* Noise texture */
+.noise {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.04;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index: 1;
+}
+
+/* Scroll reveal animations */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-left.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-right.active {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.delay-1 { transition-delay: 0.1s; }
+.delay-2 { transition-delay: 0.2s; }
+.delay-3 { transition-delay: 0.3s; }
 
 /* NAVBAR */
 .navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.4rem 2.5rem;
-  backdrop-filter: blur(20px);
-  background: rgba(2,6,23,0.6);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 1.2rem 2rem;
+  backdrop-filter: blur(20px) saturate(180%);
+  background: linear-gradient(180deg, rgba(2,6,23,0.9), rgba(2,6,23,0.7));
+  border-bottom: 1px solid rgba(99,102,241,0.1);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
 }
 
 .navbar .logo {
   font-weight: 800;
-  font-size: 1.1rem;
-  background: linear-gradient(90deg,var(--blue1),var(--blue2),var(--blue3));
+  font-size: 1.3rem;
+  background: linear-gradient(90deg, var(--blue1), var(--blue2), var(--purple));
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
+  position: relative;
+}
+
+.navbar .logo::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue1), transparent);
+  opacity: 0.5;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
 }
 
 .navbar a {
   text-decoration: none;
   color: #cbd5f5;
   font-weight: 500;
-  transition: 0.2s;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue1), var(--blue2));
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
 }
 
 .navbar a:hover {
   color: white;
+  background: rgba(99,102,241,0.1);
 }
 
-/* LAYOUT */
+.navbar a:hover::after {
+  width: 60%;
+}
 
+/* MAIN CONTAINER */
 .container {
-  max-width: 1200px;
+  position: relative;
+  z-index: 10;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 3rem;
+  padding: 3rem 2rem 4rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2.5rem;
+  min-height: calc(100vh - 80px);
 }
 
+/* CARDS */
 .card {
-  background: rgba(255,255,255,0.06);
-  backdrop-filter: blur(24px);
-  border-radius: 26px;
-  padding: 2.2rem;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.08),
-    0 40px 120px rgba(0,0,0,0.6);
+  background: linear-gradient(145deg, rgba(15,23,42,0.85), rgba(2,6,23,0.8));
+  backdrop-filter: blur(24px) saturate(180%);
+  border-radius: 28px;
+  padding: 2.5rem;
+  border: 1px solid rgba(99,102,241,0.15);
+  box-shadow: 
+    0 0 0 1px rgba(99,102,241,0.05),
+    0 40px 80px rgba(0,0,0,0.5),
+    0 0 60px rgba(99,102,241,0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.6), transparent);
+  opacity: 0.5;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 0 0 1px rgba(99,102,241,0.1),
+    0 50px 100px rgba(0,0,0,0.6),
+    0 0 80px rgba(99,102,241,0.15);
 }
 
 .card h1 {
-  margin-top: 0;
-  font-size: 2.2rem;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.8rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #fff, #cbd5f1);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
-  color: #a5b4fc;
-  margin-bottom: 1.6rem;
-  line-height: 1.6;
+  color: var(--muted);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+  font-size: 0.95rem;
 }
 
-input {
+/* FORM ELEMENTS */
+.form-section {
+  margin-bottom: 1.5rem;
+}
+
+.form-section h3 {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--blue2);
+  margin-bottom: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-section h3::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  background: linear-gradient(180deg, var(--blue1), var(--blue2));
+  border-radius: 2px;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+input, select {
   width: 100%;
-  padding: 0.85rem 1rem;
-  margin-bottom: 0.8rem;
+  padding: 1rem 1rem 1rem 3rem;
   border-radius: 16px;
-  border: none;
-  background: rgba(2,6,23,0.85);
-  color: #e5e7eb;
+  border: 1px solid rgba(148,163,184,0.15);
+  background: linear-gradient(135deg, rgba(2,6,23,0.9), rgba(15,23,42,0.7));
+  color: var(--text);
+  font-size: 0.95rem;
+  font-family: inherit;
   outline: none;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  transition: all 0.3s ease;
 }
 
-input:focus {
-  box-shadow:
-    inset 0 0 0 1px var(--blue1),
-    0 0 15px var(--blueGlow);
+input:hover, select:hover {
+  border-color: rgba(99,102,241,0.3);
+  background: linear-gradient(135deg, rgba(2,6,23,0.95), rgba(15,23,42,0.8));
 }
 
-button {
-  width: 100%;
-  padding: 0.95rem;
-  border-radius: 18px;
-  border: none;
-  cursor: pointer;
-  font-weight: 800;
-  margin-top: 0.8rem;
-  letter-spacing: 0.5px;
-  color: white;
-  background: linear-gradient(135deg, var(--blue1), var(--blue2));
-  box-shadow: 0 15px 40px var(--blueGlow);
-  transition: 0.2s ease;
+input:focus, select:focus {
+  border-color: var(--blue1);
+  box-shadow: 
+    0 0 0 3px rgba(59,130,246,0.15),
+    0 0 30px rgba(59,130,246,0.2);
+  background: linear-gradient(135deg, rgba(2,6,23,1), rgba(15,23,42,0.9));
 }
 
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 50px var(--blueGlow);
+input::placeholder {
+  color: #64748b;
+  transition: all 0.3s ease;
 }
 
-button.secondary {
-  background: rgba(255,255,255,0.08);
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+input:focus::placeholder {
+  color: #94a3b8;
+  transform: translateX(5px);
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 0.4;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+input:focus ~ .input-icon {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(99,102,241,0.6));
+}
+
+/* Material rows */
+.materials-container {
+  margin-bottom: 1rem;
 }
 
 .material-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 0.6rem;
-  margin-bottom: 0.6rem;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  animation: slideIn 0.4s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.material-row input {
+  margin-bottom: 0;
+  padding: 0.85rem 1rem;
+}
+
+.remove-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(239,68,68,0.1);
+  color: #ef4444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  margin-top: 0;
+}
+
+.remove-btn:hover {
+  background: rgba(239,68,68,0.2);
+  transform: scale(1.1);
+}
+
+/* BUTTONS */
+.btn {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.6s ease;
+}
+
+.btn:hover::before {
+  left: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--blue1), var(--blue2), var(--purple));
+  background-size: 200% 200%;
+  box-shadow: 
+    0 10px 30px rgba(99,102,241,0.4),
+    0 0 0 1px rgba(255,255,255,0.1),
+    inset 0 1px 1px rgba(255,255,255,0.2);
+  animation: gradientShift 3s ease infinite;
+  margin-top: 1rem;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 
+    0 15px 40px rgba(99,102,241,0.5),
+    0 0 0 1px rgba(255,255,255,0.15),
+    inset 0 1px 1px rgba(255,255,255,0.25);
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(148,163,184,0.15);
+  color: #cbd5f5;
+  margin-top: 0.75rem;
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(99,102,241,0.3);
+  transform: translateY(-2px);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, var(--success), #16a34a);
+  box-shadow: 0 10px 30px rgba(34,197,94,0.3);
+  margin-top: 0.75rem;
+}
+
+.btn-success:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(34,197,94,0.4);
+}
+
+/* OUTPUT SECTION */
+.output-section {
+  margin-bottom: 2rem;
+}
+
+.price-display {
+  position: relative;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(59,130,246,0.05));
+  border-radius: 20px;
+  border: 1px solid rgba(99,102,241,0.2);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  overflow: hidden;
+}
+
+.price-display::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(99,102,241,0.2), transparent 70%);
+  pointer-events: none;
+}
+
+.price-label {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+  position: relative;
 }
 
 .output-price {
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: 900;
-  background: linear-gradient(135deg,var(--blue1),var(--blue2));
+  background: linear-gradient(135deg, var(--blue1), var(--blue2), var(--purple));
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  line-height: 1;
+  position: relative;
+  text-shadow: 0 0 60px rgba(99,102,241,0.3);
+  animation: priceGlow 2s ease-in-out infinite alternate;
 }
 
-.breakdown {
+@keyframes priceGlow {
+  from { text-shadow: 0 0 40px rgba(99,102,241,0.3); }
+  to { text-shadow: 0 0 60px rgba(99,102,241,0.5), 0 0 100px rgba(99,102,241,0.2); }
+}
+
+.profit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   margin-top: 1rem;
-  font-size: 0.95rem;
-  color: #cbd5f5;
-  white-space: pre-line;
+  padding: 0.5rem 1rem;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.2);
+  border-radius: 999px;
+  color: #86efac;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* Breakdown */
+.breakdown {
+  background: rgba(2,6,23,0.5);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(148,163,184,0.1);
+}
+
+.breakdown-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(148,163,184,0.1);
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.breakdown-item:hover {
+  background: rgba(99,102,241,0.05);
+  margin: 0 -1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 8px;
+}
+
+.breakdown-item:last-child {
+  border-bottom: none;
+  font-weight: 700;
+  color: var(--blue1);
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(99,102,241,0.2);
+}
+
+.breakdown-label {
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breakdown-value {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Message textarea */
+.message-container {
+  position: relative;
+  margin-bottom: 1rem;
 }
 
 textarea {
   width: 100%;
-  height: 180px;
-  margin-top: 1rem;
+  min-height: 220px;
   border-radius: 20px;
-  padding: 1.2rem;
-  background: rgba(2,6,23,0.85);
-  color: #e5e7eb;
-  border: none;
-  resize: none;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(2,6,23,0.95), rgba(15,23,42,0.9));
+  color: var(--text);
+  border: 1px solid rgba(148,163,184,0.15);
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+textarea:focus {
+  border-color: var(--blue1);
+  box-shadow: 
+    0 0 0 3px rgba(59,130,246,0.15),
+    0 0 40px rgba(59,130,246,0.1);
+}
+
+textarea::placeholder {
+  color: #64748b;
+}
+
+.message-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+/* Toast notification */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, rgba(34,197,94,0.9), rgba(22,163,74,0.9));
+  color: white;
+  border-radius: 12px;
+  font-weight: 600;
+  box-shadow: 0 10px 40px rgba(34,197,94,0.3);
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Loading overlay */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.8);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.loading-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 3px solid rgba(99,102,241,0.2);
+  border-top-color: var(--blue1);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 1.5rem;
+  }
+  
+  .material-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .material-row input {
+    padding: 0.75rem 1rem;
+  }
+  
+  .remove-btn {
+    width: 100%;
+    height: 36px;
+    margin-top: 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar {
+    padding: 1rem;
+  }
+  
+  .nav-links {
+    gap: 0.5rem;
+  }
+  
+  .navbar a {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+  
+  .container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
+  
+  .card h1 {
+    font-size: 1.5rem;
+  }
+  
+  .output-price {
+    font-size: 2.5rem;
+  }
+  
+  .message-actions {
+    grid-template-columns: 1fr;
+  }
+  
+  .price-display {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(2,6,23,0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--blue1), var(--blue2));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--blue2), var(--purple));
 }
 </style>
 </head>
 
 <body>
 
-<div class="navbar">
-  <div class="logo">TavSoft</div>
+<!-- Background effects -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="noise"></div>
 
-  <div style="display:flex; gap:20px;">
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+  <span>✓</span>
+  <span id="toastMessage">Операцията е успешна</span>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="logo">TavSoft</div>
+  <div class="nav-links">
     {% if current_user.is_authenticated %}
-      <a href="/dashboard">Към таблото</a>
+      <a href="/dashboard">Табло</a>
       <a href="/logout">Изход</a>
     {% else %}
       <a href="/">Начало</a>
     {% endif %}
   </div>
-</div>
+</nav>
 
+<!-- MAIN CONTAINER -->
 <div class="container">
 
-<div class="card">
-  <h1>Вътрешен калкулатор</h1>
-  <div class="subtitle">
-    Въведете реалните разходи, определете печалбата си и генерирайте професионална оферта за клиента.
+  <!-- LEFT CARD: INPUT -->
+  <div class="card reveal-left">
+    <h1>Нова оферта</h1>
+    <p class="subtitle">
+      Въведете детайлите за проекта. Системата автоматично изчислява разходите, печалбата и генерира професионално съобщение за клиента.
+    </p>
+
+    <div class="form-section">
+      <div class="input-group">
+        <input id="description" placeholder="Описание на проекта (напр. Баня с тоалетна)">
+        <span class="input-icon">📝</span>
+      </div>
+      
+      <div class="input-group">
+        <input id="hours" type="number" placeholder="Предвиждани часове работа">
+        <span class="input-icon">⏱</span>
+      </div>
+      
+      <div class="input-group">
+        <input id="hourly_rate" type="number" placeholder="Цена на час (€)">
+        <span class="input-icon">€</span>
+      </div>
+      
+      <div class="input-group">
+        <input id="profit_percent" type="number" placeholder="Желан марж (%)" value="30">
+        <span class="input-icon">%</span>
+      </div>
+      
+      <div class="input-group">
+        <input id="distance" type="number" placeholder="Разстояние до обекта (км)">
+        <span class="input-icon">📍</span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Материали</h3>
+      <div class="materials-container" id="materials"></div>
+      <button class="btn btn-secondary" onclick="addMaterial()">
+        <span>+</span>
+        <span>Добави материал</span>
+      </button>
+    </div>
+
+    <button class="btn btn-primary" onclick="calculate()">
+      <span>⚡</span>
+      <span>ИЗЧИСЛИ ОФЕРТА</span>
+    </button>
   </div>
 
-  <input id="description" placeholder="Описание на работата">
-  <input id="hours" type="number" placeholder="Часове">
-  <input id="hourly_rate" type="number" placeholder="Цена на час (€)">
-  <input id="profit_percent" type="number" placeholder="Печалба (%)">
-  <input id="distance" type="number" placeholder="Разстояние (км)">
+  <!-- RIGHT CARD: OUTPUT -->
+  <div class="card reveal-right delay-1">
+    <h1>Резултат</h1>
+    
+    <div class="output-section" id="outputSection" style="display: none;">
+      <div class="price-display">
+        <div class="price-label">Крайна цена</div>
+        <div class="output-price" id="final_price">0.00 €</div>
+        <div class="profit-badge" id="profitBadge">
+          <span>📈</span>
+          <span>Печалба: <span id="profitAmount">0.00</span> €</span>
+        </div>
+      </div>
 
-  <h3>Материали</h3>
-  <div id="materials"></div>
+      <div class="breakdown" id="breakdown">
+        <!-- Dynamic content -->
+      </div>
+    </div>
 
-  <button class="secondary" onclick="addMaterial()">+ Добави материал</button>
-  <button onclick="calculate()">ИЗЧИСЛИ ОФЕРТА</button>
-</div>
+    <div id="emptyState" style="text-align: center; padding: 3rem 1rem; color: var(--muted);">
+      <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;">📊</div>
+      <p>Попълнете данните и натиснете "Изчисли оферта"</p>
+    </div>
 
-<div class="card">
-  <h1>Резултат</h1>
+    <div class="message-container" id="messageContainer" style="display: none;">
+      <h3 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: var(--blue2); margin-bottom: 1rem; font-weight: 700;">
+        Готово съобщение за клиента
+      </h3>
+      <textarea id="message" placeholder="Натиснете 'Създай оферта' за да генерирате професионално съобщение..."></textarea>
+      
+      <div class="message-actions">
+        <button class="btn btn-secondary" onclick="copyMessage()">
+          <span>📋</span>
+          <span>Копирай</span>
+        </button>
+        <button class="btn btn-success" onclick="saveOffer()">
+          <span>💾</span>
+          <span>Запази оферта</span>
+        </button>
+      </div>
+    </div>
 
-  <div class="output-price" id="final_price">– €</div>
-
-  <div class="breakdown" id="breakdown"></div>
-
-  <button onclick="generateMessage()">СЪЗДАЙ ОФЕРТА</button>
-
-  <textarea id="message" placeholder="Готово съобщение ще се появи тук..."></textarea>
-
-  <button onclick="copyMessage()">КОПИРАЙ</button>
-
-  <button class="secondary" onclick="saveOffer()">Запази офертата</button>
-</div>
+    <button class="btn btn-primary" id="generateBtn" onclick="generateMessage()" style="display: none; margin-top: 1.5rem;">
+      <span>✨</span>
+      <span>СЪЗДАЙ ОФЕРТА</span>
+    </button>
+  </div>
 
 </div>
 
 <script>
 let lastResult = null;
 
+// Initialize with one material row
+addMaterial();
+
 function addMaterial() {
-  const row = document.createElement("div");
-  row.className = "material-row";
+  const container = document.getElementById('materials');
+  const row = document.createElement('div');
+  row.className = 'material-row';
   row.innerHTML = `
-    <input placeholder="Материал">
-    <input type="number" placeholder="Цена">
-    <input type="number" placeholder="Кол-во">
+    <input placeholder="Име на материал" class="mat-name">
+    <input type="number" placeholder="Цена €" class="mat-price">
+    <input type="number" placeholder="Кол-во" class="mat-qty">
+    <button class="remove-btn" onclick="this.parentElement.remove()" title="Премахни">×</button>
   `;
-  materials.appendChild(row);
+  container.appendChild(row);
+  
+  // Animate in
+  row.style.opacity = '0';
+  row.style.transform = 'translateX(-20px)';
+  setTimeout(() => {
+    row.style.transition = 'all 0.4s ease';
+    row.style.opacity = '1';
+    row.style.transform = 'translateX(0)';
+  }, 10);
+}
+
+function showLoading(show) {
+  document.getElementById('loadingOverlay').classList.toggle('active', show);
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast');
+  const toastMessage = document.getElementById('toastMessage');
+  
+  toastMessage.textContent = message;
+  toast.style.background = type === 'success' 
+    ? 'linear-gradient(135deg, rgba(34,197,94,0.9), rgba(22,163,74,0.9))'
+    : 'linear-gradient(135deg, rgba(239,68,68,0.9), rgba(220,38,38,0.9))';
+  
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
 async function calculate() {
   const materialsData = [...document.querySelectorAll(".material-row")].map(r => {
-    const i = r.querySelectorAll("input");
+    const inputs = r.querySelectorAll("input");
     return {
-      name: i[0].value,
-      unit_price: Number(i[1].value),
-      quantity: Number(i[2].value)
+      name: inputs[0].value,
+      unit_price: Number(inputs[1].value) || 0,
+      quantity: Number(inputs[2].value) || 0
     };
-  });
+  }).filter(m => m.name && m.unit_price > 0);
 
   const payload = {
-    description: description.value,
-    hours: Number(hours.value),
-    hourly_rate: Number(hourly_rate.value),
-    profit_percent: Number(profit_percent.value),
-    distance: Number(distance.value),
+    description: document.getElementById('description').value,
+    hours: Number(document.getElementById('hours').value) || 0,
+    hourly_rate: Number(document.getElementById('hourly_rate').value) || 0,
+    profit_percent: Number(document.getElementById('profit_percent').value) || 0,
+    distance: Number(document.getElementById('distance').value) || 0,
     materials: materialsData
   };
 
-  const res = await fetch("/api/izchisli", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  showLoading(true);
+  
+  try {
+    const res = await fetch("/api/izchisli", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  const r = await res.json();
-  lastResult = r;
+    const r = await res.json();
+    lastResult = r;
 
-  final_price.innerText = r.final_price.toFixed(2) + " €";
+    // Update UI
+    document.getElementById('emptyState').style.display = 'none';
+    document.getElementById('outputSection').style.display = 'block';
+    document.getElementById('generateBtn').style.display = 'flex';
+    
+    // Animate price
+    animateValue('final_price', 0, r.final_price, 1000, '€');
+    animateValue('profitAmount', 0, r.income.total_profit, 1000, '');
+    
+    // Build breakdown
+    const breakdown = document.getElementById('breakdown');
+    breakdown.innerHTML = `
+      <div class="breakdown-item">
+        <span class="breakdown-label">📦 Материали</span>
+        <span class="breakdown-value">${r.costs.materials.toFixed(2)} €</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">🚛 Транспорт</span>
+        <span class="breakdown-value">${r.costs.transport.toFixed(2)} €</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">👷 Труд (${payload.hours}ч × ${payload.hourly_rate}€)</span>
+        <span class="breakdown-value">${r.income.labor.toFixed(2)} €</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">💎 Допълнителен марж (${payload.profit_percent}%)</span>
+        <span class="breakdown-value">${r.income.extra_profit.toFixed(2)} €</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">💰 ОБЩА ПЕЧАЛБА</span>
+        <span class="breakdown-value" style="color: var(--success);">${r.income.total_profit.toFixed(2)} €</span>
+      </div>
+      <div class="breakdown-item">
+        <span class="breakdown-label">🏆 КРАЙНА ЦЕНА</span>
+        <span class="breakdown-value" style="color: var(--blue1); font-size: 1.2rem;">${r.final_price.toFixed(2)} €</span>
+      </div>
+    `;
+    
+    // Scroll to result on mobile
+    if (window.innerWidth <= 1024) {
+      document.getElementById('outputSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+  } catch (err) {
+    showToast('Грешка при изчислението', 'error');
+  } finally {
+    showLoading(false);
+  }
+}
 
-  breakdown.innerText =
-`РАЗХОДИ:
-• Материали: ${r.costs.materials.toFixed(2)} €
-• Транспорт: ${r.costs.transport.toFixed(2)} €
-
-ПРИХОД:
-• Труд (${hours.value} ч. × ${hourly_rate.value} €): ${r.income.labor.toFixed(2)} €
-• Допълнителна печалба (${profit_percent.value}%): ${r.income.extra_profit.toFixed(2)} €
-
-ОБЩА ПЕЧАЛБА: ${r.income.total_profit.toFixed(2)} €
-
-КРАЙНА ЦЕНА: ${r.final_price.toFixed(2)} €`;
+function animateValue(id, start, end, duration, suffix) {
+  const obj = document.getElementById(id);
+  const range = end - start;
+  const minTimer = 50;
+  let stepTime = Math.abs(Math.floor(duration / range));
+  stepTime = Math.max(stepTime, minTimer);
+  
+  let startTime = new Date().getTime();
+  let endTime = startTime + duration;
+  let timer;
+  
+  function run() {
+    let now = new Date().getTime();
+    let remaining = Math.max((endTime - now) / duration, 0);
+    let value = Math.round(end - (remaining * range));
+    obj.innerHTML = value.toFixed(2) + ' ' + suffix;
+    if (value == end) clearInterval(timer);
+  }
+  
+  timer = setInterval(run, stepTime);
+  run();
 }
 
 function generateMessage() {
   if (!lastResult) return;
+  
+  const description = document.getElementById('description').value;
+  const hours = document.getElementById('hours').value;
+  const hourlyRate = document.getElementById('hourly_rate').value;
+  
+  // Professional message template
+  const message = `Здравейте,
 
-  message.value =
-`Здравейте,
+Благодаря за интереса към моите услуги относно "${description}".
 
-Относно "${description.value}", ето пълната оферта:
+Изготвих детайлна оферта, която включва:
 
-Материали: ${lastResult.costs.materials.toFixed(2)} €
-Транспорт: ${lastResult.costs.transport.toFixed(2)} €
-Труд: ${lastResult.income.labor.toFixed(2)} €
-Допълнителна печалба: ${lastResult.income.extra_profit.toFixed(2)} €
+📋 РАЗБИВКА НА РАЗХОДИТЕ:
+• Материали: ${lastResult.costs.materials.toFixed(2)} €
+• Транспорт до обекта: ${lastResult.costs.transport.toFixed(2)} €
+• Труд (${hours} часа × ${hourlyRate} €/ч): ${lastResult.income.labor.toFixed(2)} €
 
-Крайна цена: ${lastResult.final_price.toFixed(2)} €
+💼 ПЕЧАЛБА И МАРЖ:
+• Допълнителен марж: ${lastResult.income.extra_profit.toFixed(2)} €
+• Обща печалба: ${lastResult.income.total_profit.toFixed(2)} €
 
-Очаквам Вашето потвърждение.`;
+💰 КРАЙНА ОФЕРТА: ${lastResult.final_price.toFixed(2)} €
+
+Офертата е валидна 14 дни. При интерес или въпроси, моля свържете се с мен.
+
+Поздрави,
+[Вашето име]`;
+
+  document.getElementById('message').value = message;
+  document.getElementById('messageContainer').style.display = 'block';
+  
+  // Animate in
+  const container = document.getElementById('messageContainer');
+  container.style.opacity = '0';
+  container.style.transform = 'translateY(20px)';
+  setTimeout(() => {
+    container.style.transition = 'all 0.5s ease';
+    container.style.opacity = '1';
+    container.style.transform = 'translateY(0)';
+  }, 10);
+  
+  // Scroll to message
+  setTimeout(() => {
+    container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
 }
 
 function copyMessage() {
+  const message = document.getElementById('message');
+  message.select();
   navigator.clipboard.writeText(message.value);
-  alert("Съобщението е копирано ✅");
+  showToast('Съобщението е копирано в клипборда');
 }
 
 async function saveOffer() {
-  if (!lastResult) return alert("Няма изчислена оферта");
+  if (!lastResult) {
+    showToast('Първо изчислете оферта', 'error');
+    return;
+  }
 
   const payload = {
-    description: description.value,
-    hours: Number(hours.value),
-    hourly_rate: Number(hourly_rate.value),
-    profit_percent: Number(profit_percent.value),
-    distance: Number(distance.value),
+    description: document.getElementById('description').value,
+    hours: Number(document.getElementById('hours').value),
+    hourly_rate: Number(document.getElementById('hourly_rate').value),
+    profit_percent: Number(document.getElementById('profit_percent').value),
+    distance: Number(document.getElementById('distance').value),
     total_cost: lastResult.costs.base_cost,
     profit_amount: lastResult.income.total_profit,
     final_price: lastResult.final_price,
-    client_message: message.value,
+    client_message: document.getElementById('message').value,
     materials: lastResult.materials
   };
 
-  const res = await fetch("/api/jobs", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
+  showLoading(true);
+  
+  try {
+    const res = await fetch("/api/jobs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-  alert(res.ok ? "Офертата е запазена ✅" : "Грешка при запис");
+    if (res.ok) {
+      showToast('Офертата е запазена успешно');
+    } else {
+      showToast('Грешка при запазване', 'error');
+    }
+  } catch (err) {
+    showToast('Грешка при връзката', 'error');
+  } finally {
+    showLoading(false);
+  }
 }
+
+// Scroll reveal observer
+const observerOptions = {
+  root: null,
+  rootMargin: '0px',
+  threshold: 0.1
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => {
+  observer.observe(el);
+});
+
+// Input icons (replacing emoji with SVG for consistency)
+document.querySelectorAll('.input-icon').forEach(icon => {
+  const text = icon.textContent;
+  icon.textContent = '';
+  icon.style.opacity = '0.5';
+  icon.style.fontSize = '1rem';
+});
 </script>
 
 </body>

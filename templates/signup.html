@@ -2,103 +2,510 @@
 <html lang="bg">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Регистрация | TavSoft</title>
 
 <style>
 
-body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-    background:
-        radial-gradient(circle at 20% 20%, #1e3a8a 0%, #0f172a 40%, #020617 70%);
-    color:white;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-.card{
-    width:420px;
-    padding:55px;
-    border-radius:24px;
-    background:rgba(15,23,42,.75);
-    border:1px solid rgba(99,102,241,.25);
-    backdrop-filter:blur(12px);
-    box-shadow:0 0 60px rgba(59,130,246,.25);
+:root {
+    --primary: #3b82f6;
+    --primary-glow: rgba(59, 130, 246, 0.5);
+    --secondary: #6366f1;
+    --accent1: #60a5fa;
+    --accent2: #818cf8;
+    --accent3: #38bdf8;
+    --bg-dark: #020617;
+    --bg-card: rgba(15, 23, 42, 0.6);
+    --text: #ffffff;
+    --text-muted: #94a3b8;
+    --text-link: #93c5fd;
+    --error-bg: rgba(127, 29, 29, 0.9);
+    --error-text: #fecaca;
+    --input-bg: rgba(2, 6, 23, 0.8);
+    --shadow: rgba(99, 102, 241, 0.4);
 }
 
-.logo{
-    text-align:center;
-    font-size:22px;
-    font-weight:700;
-    margin-bottom:30px;
-    background:linear-gradient(90deg,#60a5fa,#818cf8,#38bdf8);
-    -webkit-background-clip:text;
-    color:transparent;
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    min-height: 100vh;
 }
 
-input{
-    width:100%;
-    padding:16px;
-    margin-bottom:18px;
-    border-radius:14px;
-    border:1px solid rgba(99,102,241,.2);
-    background:#020617;
-    color:white;
-    font-size:15px;
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: 
+        radial-gradient(circle at 0% 0%, rgba(30, 58, 138, 0.8) 0%, transparent 50%),
+        radial-gradient(circle at 100% 0%, rgba(99, 102, 241, 0.4) 0%, transparent 40%),
+        radial-gradient(circle at 50% 100%, rgba(56, 189, 248, 0.3) 0%, transparent 50%),
+        linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    position: relative;
+    overflow: hidden;
 }
 
-input:focus{
-    outline:none;
-    border:1px solid #60a5fa;
+/* Animated background particles */
+.bg-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
 }
 
-button{
-    width:100%;
-    padding:16px;
-    border-radius:14px;
-    border:none;
-    background:linear-gradient(90deg,#3b82f6,#6366f1);
-    color:white;
-    font-weight:600;
-    font-size:16px;
-    cursor:pointer;
-    transition:.2s;
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--accent1);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float 15s infinite;
+    filter: blur(1px);
 }
 
-button:hover{
-    box-shadow:0 0 20px rgba(99,102,241,.6);
+.particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+.particle:nth-child(2) { left: 20%; animation-delay: 2s; }
+.particle:nth-child(3) { left: 30%; animation-delay: 4s; }
+.particle:nth-child(4) { left: 40%; animation-delay: 1s; }
+.particle:nth-child(5) { left: 50%; animation-delay: 3s; }
+.particle:nth-child(6) { left: 60%; animation-delay: 5s; }
+.particle:nth-child(7) { left: 70%; animation-delay: 2.5s; }
+.particle:nth-child(8) { left: 80%; animation-delay: 4.5s; }
+.particle:nth-child(9) { left: 90%; animation-delay: 1.5s; }
+.particle:nth-child(10) { left: 15%; animation-delay: 6s; }
+
+@keyframes float {
+    0% {
+        transform: translateY(100vh) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-100vh) scale(1.5);
+        opacity: 0;
+    }
 }
 
-.error{
-    background:#7f1d1d;
-    color:#fecaca;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:18px;
-    text-align:center;
+/* Card with glassmorphism - NO BORDERS */
+.card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: clamp(32px, 8vw, 55px);
+    border-radius: 32px;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateY(0);
+    opacity: 0;
+    animation: cardEnter 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.footer{
-    margin-top:25px;
-    text-align:center;
-    color:#94a3b8;
+@keyframes cardEnter {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-.footer a{
-    color:#93c5fd;
-    text-decoration:none;
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 60px rgba(99, 102, 241, 0.2);
 }
 
-.footer a:hover{
-    text-decoration:underline;
+/* Animated logo */
+.logo {
+    text-align: center;
+    font-size: clamp(24px, 6vw, 28px);
+    font-weight: 800;
+    margin-bottom: 35px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2), var(--accent3), var(--accent1));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientShift 4s ease infinite;
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+@keyframes gradientShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.logo::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent1), transparent);
+    border-radius: 2px;
+    animation: lineExpand 1s ease 0.5s forwards;
+}
+
+@keyframes lineExpand {
+    to { transform: translateX(-50%) scaleX(1); }
+}
+
+/* Input fields with floating labels effect */
+.input-group {
+    position: relative;
+    margin-bottom: 24px;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: slideIn 0.5s ease forwards;
+}
+
+.input-group:nth-child(1) { animation-delay: 0.3s; }
+.input-group:nth-child(2) { animation-delay: 0.4s; }
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+input {
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 16px;
+    border: none;
+    background: var(--input-bg);
+    color: var(--text);
+    font-size: 16px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+
+input::placeholder {
+    color: rgba(148, 163, 184, 0.6);
+    transition: all 0.3s ease;
+}
+
+input:hover {
+    background: rgba(2, 6, 23, 0.9);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(99, 102, 241, 0.1);
+}
+
+input:focus {
+    outline: none;
+    background: rgba(2, 6, 23, 0.95);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.4),
+        0 0 0 2px rgba(96, 165, 250, 0.3),
+        0 0 30px rgba(99, 102, 241, 0.2);
+    transform: scale(1.02);
+}
+
+input:focus::placeholder {
+    opacity: 0;
+    transform: translateX(10px);
+}
+
+/* Error message with shake animation */
+.error {
+    background: var(--error-bg);
+    color: var(--error-text);
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    text-align: center;
+    font-size: 14px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: errorEnter 0.4s ease forwards, glowPulse 2s ease-in-out infinite;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(127, 29, 29, 0.3);
+}
+
+@keyframes errorEnter {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glowPulse {
+    0%, 100% { box-shadow: 0 4px 15px rgba(127, 29, 29, 0.3); }
+    50% { box-shadow: 0 4px 25px rgba(239, 68, 68, 0.5); }
+}
+
+.error::before {
+    content: '⚠ ';
+    font-size: 16px;
+}
+
+/* Button with ripple and glow effects */
+.button-wrapper {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.5s ease 0.5s forwards;
+    position: relative;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+button {
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    border: none;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 
+        0 4px 15px rgba(59, 130, 246, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+    transform: translateZ(0);
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+button:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 
+        0 8px 25px rgba(99, 102, 241, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.15) inset,
+        0 0 40px rgba(99, 102, 241, 0.3);
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 
+        0 2px 10px rgba(59, 130, 246, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+/* Ripple effect */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: rippleEffect 0.6s ease-out;
+    pointer-events: none;
+}
+
+@keyframes rippleEffect {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Footer with hover effects */
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 14px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease 0.6s forwards;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.footer a {
+    color: var(--text-link);
+    text-decoration: none;
+    font-weight: 600;
+    position: relative;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent1), var(--accent2));
+    transition: width 0.3s ease;
+    border-radius: 1px;
+}
+
+.footer a:hover {
+    color: white;
+    text-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
+    transform: translateY(-1px);
+}
+
+.footer a:hover::after {
+    width: 100%;
+}
+
+/* Loading state */
+button.loading {
+    color: transparent;
+    pointer-events: none;
+}
+
+button.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mobile optimizations */
+@media (max-width: 480px) {
+    body {
+        padding: 16px;
+        align-items: flex-start;
+        padding-top: 10vh;
+    }
+    
+    .card {
+        border-radius: 24px;
+        padding: 28px 24px;
+    }
+    
+    input {
+        padding: 16px 18px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    button {
+        padding: 16px;
+    }
+    
+    .footer {
+        margin-top: 24px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 481px) and (max-width: 768px) {
+    .card {
+        max-width: 400px;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .card {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* Focus visible for accessibility */
+input:focus-visible,
+button:focus-visible {
+    outline: 2px solid var(--accent1);
+    outline-offset: 2px;
 }
 
 </style>
 </head>
 
 <body>
+
+<!-- Animated background -->
+<div class="bg-animation">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+</div>
 
 <div class="card">
 
@@ -108,21 +515,29 @@ button:hover{
     <div class="error">{{ error }}</div>
     {% endif %}
 
-    <form method="POST">
+    <form method="POST" id="signupForm">
 
-        <input
-        type="email"
-        name="email"
-        placeholder="Имейл"
-        required>
+        <div class="input-group">
+            <input
+            type="email"
+            name="email"
+            placeholder="Имейл"
+            required
+            autocomplete="email">
+        </div>
 
-        <input
-        type="password"
-        name="password"
-        placeholder="Парола"
-        required>
+        <div class="input-group">
+            <input
+            type="password"
+            name="password"
+            placeholder="Парола"
+            required
+            autocomplete="new-password">
+        </div>
 
-        <button>Регистрация</button>
+        <div class="button-wrapper">
+            <button type="submit" id="submitBtn">Регистрация</button>
+        </div>
 
     </form>
 
@@ -133,6 +548,49 @@ button:hover{
 
 </div>
 
+<script>
+// Ripple effect on button click
+document.getElementById('submitBtn').addEventListener('click', function(e) {
+    const button = e.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const ripple = document.createElement('span');
+    const size = 20;
+    
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+    ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+    ripple.classList.add('ripple');
+    
+    button.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 600);
+    
+    // Add loading state
+    button.classList.add('loading');
+    setTimeout(() => {
+        button.classList.remove('loading');
+    }, 2000);
+});
+
+// Input focus animations
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+    input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+    });
+    
+    input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+    });
+});
+
+// Form submission handling (visual only, doesn't affect backend)
+document.getElementById('signupForm').addEventListener('submit', function(e) {
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading');
+    // Let the form submit normally to backend
+});
+</script>
+
 </body>
 </html>
-

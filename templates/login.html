@@ -2,152 +2,874 @@
 <html lang="bg">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Вход | TavSoft</title>
 
 <style>
+:root{
+  --bg0:#020617;
+  --bg1:#0b1022;
+  --bg2:#0f172a;
+  --accent1:#3b82f6;
+  --accent2:#6366f1;
+  --accent3:#8b5cf6;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --error:#ef4444;
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
 
 body{
-    margin:0;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-    background:
-        radial-gradient(circle at 20% 20%, #1e3a8a 0%, #0f172a 40%, #020617 70%);
-    color:white;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,"Helvetica Neue",Arial,sans-serif;
+  background:
+    radial-gradient(1200px 800px at 0% 0%, rgba(59,130,246,.15), transparent 60%),
+    radial-gradient(1000px 700px at 100% 0%, rgba(99,102,241,.12), transparent 55%),
+    radial-gradient(800px 600px at 100% 100%, rgba(139,92,246,.1), transparent 50%),
+    radial-gradient(600px 500px at 0% 100%, rgba(30,58,138,.15), transparent 50%),
+    linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);
+  color:var(--text);
+  overflow-x:hidden;
+  position:relative;
 }
 
+/* Animated background orbs */
+.bg-orbs{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:0;
+}
+
+.orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(80px);
+  opacity:.4;
+  animation:float 20s ease-in-out infinite;
+}
+
+.orb-1{
+  width:400px;
+  height:400px;
+  background:linear-gradient(135deg, rgba(59,130,246,.4), rgba(99,102,241,.2));
+  top:-100px;
+  left:-100px;
+  animation-delay:0s;
+}
+
+.orb-2{
+  width:300px;
+  height:300px;
+  background:linear-gradient(135deg, rgba(139,92,246,.3), rgba(99,102,241,.2));
+  top:40%;
+  right:-50px;
+  animation-delay:-5s;
+}
+
+.orb-3{
+  width:350px;
+  height:350px;
+  background:linear-gradient(135deg, rgba(30,58,138,.35), rgba(59,130,246,.2));
+  bottom:-100px;
+  left:30%;
+  animation-delay:-10s;
+}
+
+@keyframes float{
+  0%,100%{
+    transform:translate(0,0) scale(1);
+  }
+  25%{
+    transform:translate(30px,-30px) scale(1.05);
+  }
+  50%{
+    transform:translate(-20px,20px) scale(0.95);
+  }
+  75%{
+    transform:translate(20px,30px) scale(1.02);
+  }
+}
+
+/* Noise texture */
+.noise{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.03;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  z-index:1;
+}
+
+/* Main container */
+.container{
+  position:relative;
+  z-index:10;
+  width:100%;
+  max-width:440px;
+  padding:20px;
+  perspective:1000px;
+}
+
+/* Card with 3D tilt effect */
 .card{
-    width:420px;
-    padding:55px;
-    border-radius:24px;
-    background:rgba(15,23,42,.75);
-    border:1px solid rgba(99,102,241,.25);
-    backdrop-filter:blur(12px);
-    box-shadow:0 0 60px rgba(59,130,246,.25);
+  width:100%;
+  padding:48px 40px;
+  border-radius:28px;
+  background:
+    linear-gradient(145deg, rgba(15,23,42,.9), rgba(2,6,23,.85));
+  border:1px solid rgba(99,102,241,.2);
+  backdrop-filter:blur(20px) saturate(180%);
+  box-shadow:
+    0 0 0 1px rgba(99,102,241,.1),
+    0 25px 80px rgba(0,0,0,.4),
+    0 0 60px rgba(59,130,246,.15),
+    inset 0 1px 1px rgba(255,255,255,.05);
+  position:relative;
+  overflow:hidden;
+  transform-style:preserve-3d;
+  transition:transform 0.3s ease, box-shadow 0.3s ease;
+  animation:cardEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity:0;
+  transform:translateY(30px) rotateX(5deg);
 }
 
-.logo{
-    text-align:center;
-    font-size:22px;
-    font-weight:700;
-    margin-bottom:25px;
-    background:linear-gradient(90deg,#60a5fa,#818cf8,#38bdf8);
-    -webkit-background-clip:text;
-    color:transparent;
+@keyframes cardEntry{
+  to{
+    opacity:1;
+    transform:translateY(0) rotateX(0);
+  }
 }
 
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(99,102,241,.5), transparent);
+  animation:shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer{
+  0%,100%{
+    opacity:0.3;
+    transform:translateX(-100%);
+  }
+  50%{
+    opacity:1;
+    transform:translateX(100%);
+  }
+}
+
+.card::after{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  background:linear-gradient(135deg, rgba(59,130,246,.3), rgba(99,102,241,.2), rgba(139,92,246,.3));
+  border-radius:30px;
+  z-index:-1;
+  opacity:0;
+  transition:opacity 0.3s ease;
+  filter:blur(20px);
+}
+
+.card:hover::after{
+  opacity:0.5;
+}
+
+/* Logo section */
+.logo-section{
+  text-align:center;
+  margin-bottom:32px;
+  position:relative;
+}
+
+.logo-icon{
+  width:64px;
+  height:64px;
+  margin:0 auto 20px;
+  border-radius:20px;
+  background:
+    linear-gradient(135deg, rgba(59,130,246,.9), rgba(99,102,241,.85), rgba(139,92,246,.8));
+  box-shadow:
+    0 0 40px rgba(99,102,241,.4),
+    0 10px 30px rgba(0,0,0,.2),
+    inset 0 1px 2px rgba(255,255,255,.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  overflow:hidden;
+  animation:logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse{
+  0%,100%{
+    transform:scale(1);
+    box-shadow:0 0 40px rgba(99,102,241,.4), 0 10px 30px rgba(0,0,0,.2);
+  }
+  50%{
+    transform:scale(1.05);
+    box-shadow:0 0 60px rgba(99,102,241,.6), 0 15px 40px rgba(0,0,0,.25);
+  }
+}
+
+.logo-icon::before{
+  content:'T';
+  font-size:28px;
+  font-weight:800;
+  color:white;
+  text-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+
+.logo-icon::after{
+  content:'';
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:linear-gradient(45deg, transparent, rgba(255,255,255,.3), transparent);
+  animation:logoShimmer 3s linear infinite;
+}
+
+@keyframes logoShimmer{
+  0%{
+    transform:translateX(-100%) translateY(-100%) rotate(45deg);
+  }
+  100%{
+    transform:translateX(100%) translateY(100%) rotate(45deg);
+  }
+}
+
+.logo-text{
+  font-size:24px;
+  font-weight:800;
+  letter-spacing:-0.5px;
+  background:linear-gradient(90deg, #fff 0%, #bfdbfe 50%, #fff 100%);
+  background-size:200% auto;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  animation:textGlow 3s ease-in-out infinite;
+}
+
+@keyframes textGlow{
+  0%,100%{
+    background-position:0% center;
+  }
+  50%{
+    background-position:100% center;
+  }
+}
+
+/* Typography */
 h1{
-    text-align:center;
-    font-size:28px;
-    margin-bottom:10px;
+  text-align:center;
+  font-size:26px;
+  font-weight:700;
+  margin-bottom:8px;
+  color:#f8fafc;
+  letter-spacing:-0.3px;
 }
 
-.sub{
-    text-align:center;
-    color:#94a3b8;
-    margin-bottom:35px;
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  font-size:15px;
+  margin-bottom:32px;
+  line-height:1.5;
+}
+
+/* Error message */
+.error{
+  background:
+    linear-gradient(135deg, rgba(127,29,29,.9), rgba(153,27,27,.8));
+  color:#fecaca;
+  padding:14px 18px;
+  border-radius:12px;
+  margin-bottom:24px;
+  text-align:center;
+  font-size:14px;
+  border:1px solid rgba(239,68,68,.3);
+  box-shadow:0 10px 30px rgba(127,29,29,.3), inset 0 1px 1px rgba(255,255,255,.05);
+  position:relative;
+  overflow:hidden;
+  animation:errorShake 0.5s ease-in-out;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+@keyframes errorShake{
+  0%,100%{
+    transform:translateX(0);
+  }
+  25%{
+    transform:translateX(-5px);
+  }
+  75%{
+    transform:translateX(5px);
+  }
+}
+
+.error::before{
+  content:'!';
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:rgba(239,68,68,.3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  font-size:12px;
+  flex-shrink:0;
+}
+
+/* Form fields */
+.form-group{
+  margin-bottom:20px;
+  position:relative;
+}
+
+.input-wrapper{
+  position:relative;
 }
 
 input{
-    width:100%;
-    padding:16px;
-    margin-bottom:18px;
-    border-radius:14px;
-    border:1px solid rgba(99,102,241,.2);
-    background:#020617;
-    color:white;
-    font-size:15px;
+  width:100%;
+  padding:16px 18px 16px 48px;
+  border-radius:14px;
+  border:1px solid rgba(148,163,184,.2);
+  background:
+    linear-gradient(135deg, rgba(2,6,23,.8), rgba(15,23,42,.6));
+  color:var(--text);
+  font-size:15px;
+  font-family:inherit;
+  transition:all 0.3s ease;
+  outline:none;
+  position:relative;
+}
+
+input::placeholder{
+  color:#64748b;
+  transition:all 0.3s ease;
+}
+
+input:hover{
+  border-color:rgba(99,102,241,.4);
+  background:
+    linear-gradient(135deg, rgba(2,6,23,.9), rgba(15,23,42,.7));
 }
 
 input:focus{
-    outline:none;
-    border:1px solid #60a5fa;
+  border-color:var(--accent1);
+  box-shadow:
+    0 0 0 3px rgba(59,130,246,.15),
+    0 0 30px rgba(59,130,246,.1);
+  background:
+    linear-gradient(135deg, rgba(2,6,23,.95), rgba(15,23,42,.8));
 }
 
+input:focus::placeholder{
+  color:#94a3b8;
+  transform:translateX(5px);
+}
+
+/* Input icons */
+.input-icon{
+  position:absolute;
+  left:16px;
+  top:50%;
+  transform:translateY(-50%);
+  width:20px;
+  height:20px;
+  opacity:.5;
+  transition:all 0.3s ease;
+  pointer-events:none;
+}
+
+.input-icon.email{
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.input-icon.password{
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+input:focus ~ .input-icon{
+  opacity:1;
+  filter:drop-shadow(0 0 8px rgba(59,130,246,.5));
+}
+
+/* Password toggle */
+.password-toggle{
+  position:absolute;
+  right:16px;
+  top:50%;
+  transform:translateY(-50%);
+  width:20px;
+  height:20px;
+  cursor:pointer;
+  opacity:.4;
+  transition:all 0.3s ease;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+.password-toggle:hover{
+  opacity:.8;
+}
+
+.password-toggle.show{
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* Options row */
+.options{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
+  font-size:13px;
+}
+
+.remember{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  cursor:pointer;
+  transition:color 0.3s ease;
+}
+
+.remember:hover{
+  color:#e2e8f0;
+}
+
+.remember input[type="checkbox"]{
+  width:16px;
+  height:16px;
+  margin:0;
+  padding:0;
+  accent-color:var(--accent1);
+  cursor:pointer;
+}
+
+.forgot{
+  color:#93c5fd;
+  text-decoration:none;
+  transition:all 0.3s ease;
+  position:relative;
+}
+
+.forgot::after{
+  content:'';
+  position:absolute;
+  bottom:-2px;
+  left:0;
+  width:0;
+  height:1px;
+  background:currentColor;
+  transition:width 0.3s ease;
+}
+
+.forgot:hover{
+  color:#bfdbfe;
+}
+
+.forgot:hover::after{
+  width:100%;
+}
+
+/* Submit button */
 button{
-    width:100%;
-    padding:16px;
-    border-radius:14px;
-    border:none;
-    background:linear-gradient(90deg,#3b82f6,#6366f1);
-    color:white;
-    font-weight:600;
-    font-size:16px;
-    cursor:pointer;
-    transition:.2s;
+  width:100%;
+  padding:16px 24px;
+  border-radius:14px;
+  border:none;
+  background:
+    linear-gradient(135deg, var(--accent1) 0%, var(--accent2) 50%, var(--accent3) 100%);
+  background-size:200% 200%;
+  color:white;
+  font-weight:700;
+  font-size:16px;
+  font-family:inherit;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:all 0.3s ease;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.1),
+    0 10px 30px rgba(59,130,246,.3),
+    inset 0 1px 1px rgba(255,255,255,.2);
+  animation:gradientShift 3s ease infinite;
+}
+
+@keyframes gradientShift{
+  0%,100%{
+    background-position:0% 50%;
+  }
+  50%{
+    background-position:100% 50%;
+  }
+}
+
+button::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+  transition:left 0.5s ease;
 }
 
 button:hover{
-    box-shadow:0 0 20px rgba(99,102,241,.6);
+  transform:translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.15),
+    0 15px 40px rgba(59,130,246,.4),
+    inset 0 1px 1px rgba(255,255,255,.25);
 }
 
-.error{
-    background:#7f1d1d;
-    color:#fecaca;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:18px;
-    text-align:center;
+button:hover::before{
+  left:100%;
 }
 
+button:active{
+  transform:translateY(0);
+}
+
+button.loading{
+  pointer-events:none;
+  opacity:.8;
+}
+
+button.loading::after{
+  content:'';
+  position:absolute;
+  width:20px;
+  height:20px;
+  border:2px solid rgba(255,255,255,.3);
+  border-top-color:white;
+  border-radius:50%;
+  animation:spin 0.8s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+/* Footer */
 .footer{
-    margin-top:25px;
-    text-align:center;
-    color:#94a3b8;
+  text-align:center;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+  margin-top:24px;
 }
 
 .footer a{
-    color:#93c5fd;
-    text-decoration:none;
+  color:#93c5fd;
+  text-decoration:none;
+  font-weight:600;
+  position:relative;
+  transition:all 0.3s ease;
+}
+
+.footer a::after{
+  content:'';
+  position:absolute;
+  bottom:-2px;
+  left:0;
+  width:0;
+  height:2px;
+  background:linear-gradient(90deg, var(--accent1), var(--accent2));
+  transition:width 0.3s ease;
+  border-radius:1px;
 }
 
 .footer a:hover{
-    text-decoration:underline;
+  color:#bfdbfe;
 }
 
+.footer a:hover::after{
+  width:100%;
+}
+
+/* Security badge */
+.security-badge{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  margin-top:20px;
+  padding:12px;
+  border-radius:10px;
+  background:rgba(34,197,94,.1);
+  border:1px solid rgba(34,197,94,.2);
+  color:#86efac;
+  font-size:12px;
+  font-weight:500;
+}
+
+.security-badge::before{
+  content:'';
+  width:16px;
+  height:16px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2322c55e' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* Back link */
+.back-link{
+  position:fixed;
+  top:24px;
+  left:24px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:14px;
+  font-weight:500;
+  padding:10px 16px;
+  border-radius:12px;
+  background:rgba(15,23,42,.5);
+  border:1px solid rgba(148,163,184,.1);
+  backdrop-filter:blur(10px);
+  transition:all 0.3s ease;
+  z-index:100;
+}
+
+.back-link:hover{
+  color:#e2e8f0;
+  background:rgba(15,23,42,.8);
+  border-color:rgba(99,102,241,.3);
+  transform:translateX(-3px);
+}
+
+.back-link::before{
+  content:'';
+  width:16px;
+  height:16px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' stroke-width='2'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M10 19l-7-7m0 0l7-7m-7 7h18'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* Responsive */
+@media(max-width:480px){
+  .container{
+    padding:16px;
+  }
+  
+  .card{
+    padding:36px 24px;
+    border-radius:24px;
+  }
+  
+  .logo-icon{
+    width:56px;
+    height:56px;
+  }
+  
+  h1{
+    font-size:24px;
+  }
+  
+  .back-link{
+    top:16px;
+    left:16px;
+    padding:8px 12px;
+    font-size:13px;
+  }
+}
+
+/* Focus visible for accessibility */
+input:focus-visible,
+button:focus-visible,
+a:focus-visible{
+  outline:2px solid var(--accent1);
+  outline-offset:2px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<!-- Background effects -->
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+</div>
+<div class="noise"></div>
 
-    <div class="logo">TavSoft</div>
+<!-- Back link -->
+<a href="/" class="back-link">Назад към сайта</a>
 
-    <h1>Добре дошли отново!</h1>
-    <div class="sub">Влезте в работното си пространство.</div>
-
+<div class="container">
+  <div class="card" id="loginCard">
+    
+    <!-- Logo -->
+    <div class="logo-section">
+      <div class="logo-icon"></div>
+      <div class="logo-text">TavSoft</div>
+    </div>
+    
+    <!-- Header -->
+    <h1>Добре дошли отново</h1>
+    <p class="subtitle">Влезте в профила си, за да управлявате офертите си</p>
+    
+    <!-- Error message -->
     {% if error %}
     <div class="error">{{ error }}</div>
     {% endif %}
-
-    <form method="POST">
-
-        <input
-        type="email"
-        name="email"
-        placeholder="Имейл"
-        required>
-
-        <input
-        type="password"
-        name="password"
-        placeholder="Парола"
-        required>
-
-        <button>Вход</button>
-
+    
+    <!-- Form -->
+    <form method="POST" id="loginForm">
+      
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input 
+            type="email" 
+            name="email" 
+            id="email"
+            placeholder="Имейл адрес" 
+            required
+            autocomplete="email">
+          <span class="input-icon email"></span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <div class="input-wrapper">
+          <input 
+            type="password" 
+            name="password" 
+            id="password"
+            placeholder="Парола" 
+            required
+            autocomplete="current-password">
+          <span class="input-icon password"></span>
+          <span class="password-toggle" id="togglePassword"></span>
+        </div>
+      </div>
+      
+      <div class="options">
+        <label class="remember">
+          <input type="checkbox" name="remember" checked>
+          <span>Запомни ме</span>
+        </label>
+        <a href="/forgot-password" class="forgot">Забравена парола?</a>
+      </div>
+      
+      <button type="submit" id="submitBtn">
+        <span>Вход в системата</span>
+      </button>
+      
     </form>
-
+    
+    <!-- Footer -->
     <div class="footer">
-        Нямате акаунт?
-        <a href="/signup">Създайте профил</a>
+      Нямате акаунт?
+      <a href="/signup">Създайте профил</a>
     </div>
-
+    
+    <!-- Security badge -->
+    <div class="security-badge">
+      Криптирана връзка и защита на данните
+    </div>
+    
+  </div>
 </div>
+
+<script>
+// Password toggle
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
+
+togglePassword.addEventListener('click', function() {
+  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+  passwordInput.setAttribute('type', type);
+  this.classList.toggle('show');
+});
+
+// Form submission with loading state
+const form = document.getElementById('loginForm');
+const submitBtn = document.getElementById('submitBtn');
+const btnText = submitBtn.querySelector('span');
+
+form.addEventListener('submit', function(e) {
+  // Show loading state
+  submitBtn.classList.add('loading');
+  btnText.style.opacity = '0';
+  
+  // Allow normal form submission
+  // Backend handles the actual login
+});
+
+// 3D tilt effect on card (desktop only)
+const card = document.getElementById('loginCard');
+const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+if (!isTouchDevice) {
+  document.addEventListener('mousemove', function(e) {
+    const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+    const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+    card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+  });
+  
+  document.addEventListener('mouseleave', function() {
+    card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+  });
+}
+
+// Input focus animations
+const inputs = document.querySelectorAll('input');
+inputs.forEach(input => {
+  input.addEventListener('focus', function() {
+    this.parentElement.style.transform = 'scale(1.02)';
+  });
+  
+  input.addEventListener('blur', function() {
+    this.parentElement.style.transform = 'scale(1)';
+  });
+});
+
+// Remember email in localStorage
+const emailInput = document.getElementById('email');
+const savedEmail = localStorage.getItem('tavsoft_last_email');
+
+if (savedEmail) {
+  emailInput.value = savedEmail;
+}
+
+form.addEventListener('submit', function() {
+  if (document.querySelector('input[name="remember"]').checked) {
+    localStorage.setItem('tavsoft_last_email', emailInput.value);
+  }
+});
+</script>
 
 </body>
 </html>
-

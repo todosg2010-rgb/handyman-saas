@@ -2,147 +2,606 @@
 <html lang="bg">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>TavSoft Workspace</title>
 
 <style>
 
-body{
-    margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-    background:
-        radial-gradient(circle at 20% 20%, #1e3a8a 0%, #0f172a 40%, #020617 70%);
-    color:white;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
-/* NAV */
-
-.nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:28px 70px;
-    border-bottom:1px solid rgba(99,102,241,.15);
+:root {
+    --primary: #3b82f6;
+    --primary-light: #60a5fa;
+    --secondary: #6366f1;
+    --accent: #38bdf8;
+    --bg-deep: #020617;
+    --bg-card: rgba(15, 23, 42, 0.6);
+    --text: #ffffff;
+    --text-muted: #94a3b8;
+    --text-bright: #cbd5e1;
+    --glow: rgba(99, 102, 241, 0.5);
+    --transition: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.logo{
-    font-size:24px;
-    font-weight:700;
-    background:linear-gradient(90deg,#60a5fa,#818cf8,#38bdf8);
-    -webkit-background-clip:text;
-    color:transparent;
+html, body {
+    overflow-x: hidden;
+    width: 100%;
 }
 
-.nav-links{
-    display:flex;
-    gap:30px;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: 
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(30, 58, 138, 0.8), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 0%, rgba(99, 102, 241, 0.4), transparent),
+        radial-gradient(ellipse 50% 50% at 50% 100%, rgba(56, 189, 248, 0.2), transparent),
+        linear-gradient(180deg, #0f172a 0%, #020617 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    min-height: 100vh;
+    position: relative;
 }
 
-.nav a{
-    color:#93c5fd;
-    text-decoration:none;
-    font-size:15px;
-    transition:.2s;
+/* Animated mesh gradient background */
+.bg-mesh {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
 }
 
-.nav a:hover{
-    color:white;
+.mesh-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float 20s infinite ease-in-out;
 }
 
-/* HERO */
-
-.hero{
-    max-width:1000px;
-    margin:140px auto 90px auto;
-    text-align:center;
+.mesh-blob:nth-child(1) {
+    width: 600px;
+    height: 600px;
+    background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+    top: -200px;
+    left: -100px;
+    animation-delay: 0s;
 }
 
-.title{
-    font-size:64px;
-    font-weight:800;
-    line-height:1.05;
-
-    background:linear-gradient(90deg,#ffffff,#93c5fd,#818cf8);
-    -webkit-background-clip:text;
-    color:transparent;
-
-    text-shadow:
-        0 0 25px rgba(99,102,241,.35);
+.mesh-blob:nth-child(2) {
+    width: 500px;
+    height: 500px;
+    background: linear-gradient(135deg, #6366f1, #818cf8);
+    top: 10%;
+    right: -150px;
+    animation-delay: -5s;
 }
 
-.subtitle{
-    margin-top:30px;
-    font-size:21px;
-    color:#cbd5e1;
-    line-height:1.8;
+.mesh-blob:nth-child(3) {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, #38bdf8, #60a5fa);
+    bottom: 10%;
+    left: 20%;
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(30px, -30px) scale(1.1); }
+    50% { transform: translate(-20px, 20px) scale(0.9); }
+    75% { transform: translate(20px, 30px) scale(1.05); }
+}
+
+/* NAVIGATION - Glassmorphism */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transform: translateY(-100%);
+    animation: slideDown 0.8s var(--transition) forwards;
+}
+
+@keyframes slideDown {
+    to { transform: translateY(0); }
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #60a5fa, #818cf8, #38bdf8, #60a5fa);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientFlow 4s ease infinite;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+@keyframes gradientFlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+.nav-links {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.nav a {
+    color: #93c5fd;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 12px;
+    transition: all 0.3s var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.nav a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(99, 102, 241, 0.2));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 12px;
+}
+
+.nav a:hover {
+    color: white;
+    transform: translateY(-2px);
+}
+
+.nav a:hover::before {
+    opacity: 1;
+}
+
+/* HERO SECTION */
+.hero {
+    position: relative;
+    z-index: 1;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 180px 24px 60px;
+    text-align: center;
+    perspective: 1000px;
+}
+
+.title {
+    font-size: clamp(36px, 8vw, 72px);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(180deg, #ffffff 0%, #93c5fd 50%, #818cf8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    transform: translateY(40px) rotateX(-15deg);
+    animation: titleEnter 1s var(--transition) 0.3s forwards;
+    position: relative;
+}
+
+.title::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+    border-radius: 2px;
+    opacity: 0;
+    animation: lineGrow 0.8s ease 1s forwards;
+}
+
+@keyframes titleEnter {
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
+}
+
+@keyframes lineGrow {
+    to {
+        opacity: 1;
+        width: 200px;
+    }
+}
+
+.subtitle {
+    margin-top: 50px;
+    font-size: clamp(16px, 3vw, 20px);
+    color: var(--text-bright);
+    line-height: 1.9;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s var(--transition) 0.6s forwards;
+}
+
+.subtitle br {
+    display: block;
+    content: "";
+    margin: 12px 0;
 }
 
 /* PORTAL GRID */
-
-.grid{
-    max-width:1200px;
-    margin:100px auto;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:50px;
+.grid {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 30px;
+    perspective: 2000px;
 }
 
-/* CARD */
-
-.card{
-    padding:60px;
-    border-radius:22px;
-    background:rgba(15,23,42,.7);
-    border:1px solid rgba(99,102,241,.2);
-    backdrop-filter:blur(8px);
-    cursor:pointer;
-    position:relative;
-    overflow:hidden;
-    transition:.3s;
+/* PREMIUM CARDS */
+.card {
+    position: relative;
+    padding: 50px 40px;
+    border-radius: 28px;
+    background: var(--bg-card);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    cursor: pointer;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: all 0.5s var(--transition);
+    opacity: 0;
+    transform: translateY(60px) rotateX(10deg);
+    animation: cardEnter 0.8s var(--transition) forwards;
+    box-shadow: 
+        0 4px 24px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-.card::after{
-    content:"";
-    position:absolute;
-    inset:-2px;
-    border-radius:22px;
-    background:linear-gradient(120deg,
-        rgba(59,130,246,.4),
-        rgba(99,102,241,.4),
-        rgba(56,189,248,.4));
-    opacity:0;
-    z-index:-1;
-    transition:.3s;
+.card:nth-child(1) { animation-delay: 0.8s; }
+.card:nth-child(2) { animation-delay: 1s; }
+
+@keyframes cardEnter {
+    to {
+        opacity: 1;
+        transform: translateY(0) rotateX(0);
+    }
 }
 
-.card:hover::after{
-    opacity:1;
+/* Animated border gradient */
+.card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+    padding: 1.5px;
+    background: linear-gradient(135deg, 
+        rgba(96, 165, 250, 0) 0%,
+        rgba(96, 165, 250, 0.3) 50%,
+        rgba(129, 140, 248, 0) 100%);
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
-.card:hover{
-    transform:translateY(-8px);
+.card::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 30px;
+    background: linear-gradient(135deg,
+        rgba(59, 130, 246, 0.4),
+        rgba(99, 102, 241, 0.4),
+        rgba(56, 189, 248, 0.4),
+        rgba(59, 130, 246, 0.4));
+    background-size: 300% 300%;
+    opacity: 0;
+    z-index: -1;
+    filter: blur(8px);
+    transition: opacity 0.5s ease;
+    animation: gradientRotate 3s linear infinite;
 }
 
-.card-title{
-    font-size:28px;
-    font-weight:700;
-    margin-bottom:18px;
+@keyframes gradientRotate {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
-.card-text{
-    font-size:17px;
-    color:#cbd5e1;
-    line-height:1.8;
+.card:hover {
+    transform: translateY(-12px) rotateX(5deg) scale(1.02);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(99, 102, 241, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card:hover::after {
+    opacity: 0.6;
+}
+
+/* Card content shine effect */
+.card-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+    transform: skewX(-25deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+}
+
+.card:hover .card-shine {
+    left: 150%;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover .card-icon {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.6);
+}
+
+.card-title {
+    font-size: clamp(22px, 4vw, 28px);
+    font-weight: 800;
+    margin-bottom: 16px;
+    background: linear-gradient(90deg, #ffffff, #93c5fd);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-title {
+    transform: translateX(8px);
+}
+
+.card-text {
+    font-size: 16px;
+    color: var(--text-bright);
+    line-height: 1.8;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-text {
+    transform: translateX(8px);
+}
+
+/* Arrow indicator */
+.card-arrow {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: all 0.3s ease;
+    font-size: 18px;
+}
+
+.card:hover .card-arrow {
+    opacity: 1;
+    transform: translateX(0);
+    background: linear-gradient(135deg, var(--primary-light), var(--secondary));
 }
 
 /* FOOTER NOTE */
+.note {
+    position: relative;
+    z-index: 1;
+    max-width: 850px;
+    margin: 100px auto;
+    padding: 0 24px 60px;
+    text-align: center;
+    color: var(--text-muted);
+    line-height: 2;
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp 0.8s var(--transition) 1.2s forwards;
+}
 
-.note{
-    max-width:850px;
-    margin:140px auto;
-    text-align:center;
-    color:#94a3b8;
-    line-height:1.9;
-    font-size:16px;
+.note strong {
+    color: var(--text-bright);
+    font-weight: 600;
+}
+
+.note::before {
+    content: '"';
+    display: block;
+    font-size: 80px;
+    color: rgba(99, 102, 241, 0.2);
+    line-height: 1;
+    margin-bottom: -20px;
+    font-family: Georgia, serif;
+}
+
+/* Floating action button for mobile */
+.fab {
+    display: none;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5);
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 999;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fabPulse 2s ease-in-out infinite;
+}
+
+@keyframes fabPulse {
+    0%, 100% { box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5); }
+    50% { box-shadow: 0 8px 40px rgba(99, 102, 241, 0.8); }
+}
+
+.fab:hover {
+    transform: scale(1.1);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .nav {
+        padding: 16px 20px;
+    }
+    
+    .nav-links {
+        gap: 4px;
+    }
+    
+    .nav a {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+    
+    .hero {
+        padding-top: 140px;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+        margin: 60px auto;
+    }
+    
+    .card {
+        padding: 36px 28px;
+    }
+    
+    .card-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+    
+    .note {
+        margin: 60px auto;
+    }
+    
+    .note::before {
+        font-size: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo {
+        font-size: 22px;
+    }
+    
+    .hero {
+        padding-top: 120px;
+    }
+    
+    .card {
+        padding: 32px 24px;
+        border-radius: 24px;
+    }
+    
+    .card-arrow {
+        display: none;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .mesh-blob {
+        animation: none;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--primary-light), var(--accent));
 }
 
 </style>
@@ -150,25 +609,28 @@ body{
 
 <body>
 
+<!-- Animated background mesh -->
+<div class="bg-mesh">
+    <div class="mesh-blob"></div>
+    <div class="mesh-blob"></div>
+    <div class="mesh-blob"></div>
+</div>
+
+<!-- Navigation -->
 <div class="nav">
-
-    <div class="logo">TavSoft</div>
-
+    <div class="logo" onclick="location.href='/'">TavSoft</div>
     <div class="nav-links">
         <a href="/">Начало</a>
         <a href="/logout">Изход</a>
     </div>
-
 </div>
 
-
+<!-- Hero Section -->
 <div class="hero">
-
     <div class="title">
         Управлявай бизнеса си<br>
         като професионалист.
     </div>
-
     <div class="subtitle">
         TavSoft е твоето централно работно пространство.
         Място, където всяка оферта е изчислена прецизно,
@@ -178,59 +640,108 @@ body{
         Това не е просто калкулатор —
         това е система за изграждане на устойчив бизнес.
     </div>
-
 </div>
 
-
-
+<!-- Portal Grid -->
 <div class="grid">
 
-    <div class="card" onclick="location.href='/demo'">
-
-        <div class="card-title">
-            Създай нова оферта
-        </div>
-
+    <div class="card" onclick="location.href='/demo'" role="button" tabindex="0">
+        <div class="card-shine"></div>
+        <div class="card-icon">📋</div>
+        <div class="card-title">Създай нова оферта</div>
         <div class="card-text">
             Изчисли труд, материали и печалба със структура.
             Създай професионална цена,
             която можеш да защитиш пред всеки клиент.
             Работи бързо. Работи уверено.
         </div>
-
+        <div class="card-arrow">→</div>
     </div>
 
-
-
-    <div class="card" onclick="location.href='/analytics'">
-
-        <div class="card-title">
-            Прегледай анализите
-        </div>
-
+    <div class="card" onclick="location.href='/analytics'" role="button" tabindex="0">
+        <div class="card-shine"></div>
+        <div class="card-icon">📊</div>
+        <div class="card-title">Прегледай анализите</div>
         <div class="card-text">
             Виж реалната картина на бизнеса си.
             Проследявай маржа си,
             разбери кои проекти носят най-много стойност
             и вземай решения на база данни.
         </div>
-
+        <div class="card-arrow">→</div>
     </div>
 
 </div>
 
-
-
+<!-- Footer Note -->
 <div class="note">
-
-    Сериозният майстор не разчита на усещане.
+    <strong>Сериозният майстор не разчита на усещане.</strong><br>
     Той разчита на система.
     <br><br>
     TavSoft ти дава тази система —
     за да работиш по-умно, не просто повече.
-
 </div>
+
+<script>
+// 3D tilt effect for cards
+document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        
+        const rotateX = (y - centerY) / 20;
+        const rotateY = (centerX - x) / 20;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-12px) scale(1.02)`;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+    });
+    
+    // Keyboard accessibility
+    card.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            card.click();
+        }
+    });
+});
+
+// Smooth scroll behavior
+document.querySelectorAll('a[href^="/"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (href.startsWith('/')) {
+            // Let normal navigation happen, but add fade out effect
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease';
+        }
+    });
+});
+
+// Intersection Observer for scroll animations
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+document.querySelectorAll('.card, .note').forEach(el => {
+    observer.observe(el);
+});
+</script>
 
 </body>
 </html>
-
