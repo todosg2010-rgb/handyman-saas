@@ -2,7 +2,10 @@
 <html lang="bg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+<meta name="theme-color" content="#020617">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>TavSoft - Оферти с точни разходи</title>
 
 <style>
@@ -32,10 +35,12 @@
 html{
   scroll-behavior:smooth;
   overflow-x:hidden;
+  background:var(--bg0);
 }
 
 html,body{
   min-height:100%;
+  background:var(--bg0);
 }
 
 body{
@@ -51,9 +56,11 @@ body{
   overflow-x:hidden;
   line-height:1.6;
   position:relative;
+  min-height:100vh;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
-/* Animated background orbs */
+/* Animated background orbs - enhanced */
 .bg-orbs{
   position:fixed;
   inset:0;
@@ -65,15 +72,15 @@ body{
 .orb{
   position:absolute;
   border-radius:50%;
-  filter:blur(80px);
-  opacity:.5;
-  animation:float 20s ease-in-out infinite;
+  filter:blur(60px);
+  opacity:.6;
+  animation:float 15s ease-in-out infinite;
 }
 
 .orb-1{
   width:600px;
   height:600px;
-  background:linear-gradient(135deg, rgba(99,102,241,.45), rgba(59,130,246,.25));
+  background:linear-gradient(135deg, rgba(99,102,241,.5), rgba(59,130,246,.3));
   top:-200px;
   left:-200px;
   animation-delay:0s;
@@ -82,37 +89,37 @@ body{
 .orb-2{
   width:500px;
   height:500px;
-  background:linear-gradient(135deg, rgba(56,189,248,.4), rgba(99,102,241,.2));
+  background:linear-gradient(135deg, rgba(56,189,248,.45), rgba(99,102,241,.25));
   top:20%;
   right:-150px;
-  animation-delay:-7s;
+  animation-delay:-5s;
 }
 
 .orb-3{
   width:550px;
   height:550px;
-  background:linear-gradient(135deg, rgba(139,92,246,.35), rgba(99,102,241,.2));
+  background:linear-gradient(135deg, rgba(139,92,246,.4), rgba(99,102,241,.25));
   bottom:-200px;
   left:30%;
-  animation-delay:-14s;
+  animation-delay:-10s;
 }
 
 .orb-4{
   width:400px;
   height:400px;
-  background:linear-gradient(135deg, rgba(30,58,138,.4), rgba(59,130,246,.2));
+  background:linear-gradient(135deg, rgba(30,58,138,.5), rgba(59,130,246,.25));
   top:60%;
   left:-100px;
-  animation-delay:-5s;
+  animation-delay:-3s;
 }
 
 .orb-5{
   width:450px;
   height:450px;
-  background:linear-gradient(135deg, rgba(168,85,247,.3), rgba(99,102,241,.2));
+  background:linear-gradient(135deg, rgba(168,85,247,.35), rgba(99,102,241,.25));
   bottom:10%;
   right:10%;
-  animation-delay:-10s;
+  animation-delay:-7s;
 }
 
 @keyframes float{
@@ -120,17 +127,17 @@ body{
     transform:translate(0,0) scale(1);
   }
   25%{
-    transform:translate(40px,-40px) scale(1.05);
+    transform:translate(30px,-30px) scale(1.05);
   }
   50%{
-    transform:translate(-30px,30px) scale(0.95);
+    transform:translate(-20px,20px) scale(0.95);
   }
   75%{
-    transform:translate(30px,40px) scale(1.02);
+    transform:translate(20px,30px) scale(1.02);
   }
 }
 
-/* Particle effect */
+/* Enhanced particle effect */
 .particles{
   position:fixed;
   inset:0;
@@ -141,23 +148,29 @@ body{
 
 .particle{
   position:absolute;
-  width:4px;
-  height:4px;
-  background:rgba(99,102,241,.3);
+  width:2px;
+  height:2px;
+  background:rgba(99,102,241,.4);
   border-radius:50%;
-  animation:particleFloat 15s linear infinite;
+  animation:particleFloat 12s linear infinite;
+  box-shadow:0 0 10px rgba(99,102,241,.5);
 }
 
-.particle:nth-child(1){left:10%;animation-delay:0s;animation-duration:20s;}
-.particle:nth-child(2){left:20%;animation-delay:2s;animation-duration:25s;}
-.particle:nth-child(3){left:30%;animation-delay:4s;animation-duration:22s;}
-.particle:nth-child(4){left:40%;animation-delay:6s;animation-duration:28s;}
-.particle:nth-child(5){left:50%;animation-delay:8s;animation-duration:24s;}
-.particle:nth-child(6){left:60%;animation-delay:10s;animation-duration:26s;}
-.particle:nth-child(7){left:70%;animation-delay:12s;animation-duration:21s;}
-.particle:nth-child(8){left:80%;animation-delay:14s;animation-duration:23s;}
-.particle:nth-child(9){left:90%;animation-delay:16s;animation-duration:27s;}
-.particle:nth-child(10){left:5%;animation-delay:18s;animation-duration:19s;}
+.particle:nth-child(1){left:10%;animation-delay:0s;animation-duration:15s;}
+.particle:nth-child(2){left:20%;animation-delay:1s;animation-duration:18s;}
+.particle:nth-child(3){left:30%;animation-delay:2s;animation-duration:16s;}
+.particle:nth-child(4){left:40%;animation-delay:3s;animation-duration:20s;}
+.particle:nth-child(5){left:50%;animation-delay:4s;animation-duration:17s;}
+.particle:nth-child(6){left:60%;animation-delay:5s;animation-duration:19s;}
+.particle:nth-child(7){left:70%;animation-delay:6s;animation-duration:14s;}
+.particle:nth-child(8){left:80%;animation-delay:7s;animation-duration:21s;}
+.particle:nth-child(9){left:90%;animation-delay:8s;animation-duration:16s;}
+.particle:nth-child(10){left:5%;animation-delay:9s;animation-duration:18s;}
+.particle:nth-child(11){left:15%;animation-delay:2s;animation-duration:22s;}
+.particle:nth-child(12){left:25%;animation-delay:4s;animation-duration:15s;}
+.particle:nth-child(13){left:35%;animation-delay:6s;animation-duration:19s;}
+.particle:nth-child(14){left:45%;animation-delay:8s;animation-duration:17s;}
+.particle:nth-child(15){left:55%;animation-delay:10s;animation-duration:20s;}
 
 @keyframes particleFloat{
   0%{
@@ -181,10 +194,23 @@ body{
   pointer-events:none;
   position:fixed;
   inset:0;
-  opacity:.04;
+  opacity:.03;
   mix-blend-mode:overlay;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
   z-index:2;
+}
+
+/* Grid overlay for futuristic effect */
+.grid-overlay{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+  background-image:
+    linear-gradient(rgba(99,102,241,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,.03) 1px, transparent 1px);
+  background-size:50px 50px;
+  mask-image:radial-gradient(circle at center, black 40%, transparent 80%);
 }
 
 /* Scroll reveal animations */
@@ -243,31 +269,31 @@ body{
   top:0;
   z-index:50;
   backdrop-filter:blur(20px) saturate(180%);
-  background:linear-gradient(180deg, rgba(2,6,23,.9), rgba(2,6,23,.7));
-  border-bottom:1px solid rgba(99,102,241,.1);
-  box-shadow:0 10px 40px rgba(0,0,0,.3);
+  background:linear-gradient(180deg, rgba(2,6,23,.95), rgba(2,6,23,.75));
+  border-bottom:1px solid rgba(99,102,241,.15);
+  box-shadow:0 10px 40px rgba(0,0,0,.4);
   transition:all 0.3s ease;
 }
 
 .nav.scrolled{
-  background:linear-gradient(180deg, rgba(2,6,23,.95), rgba(2,6,23,.85));
-  border-bottom-color:rgba(99,102,241,.15);
+  background:linear-gradient(180deg, rgba(2,6,23,.98), rgba(2,6,23,.9));
+  border-bottom-color:rgba(99,102,241,.25);
 }
 
 .nav-inner{
   max-width:1200px;
   margin:0 auto;
-  padding:0 24px;
+  padding:0 20px;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  height:72px;
+  height:64px;
 }
 
 .brand{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:10px;
   text-decoration:none;
   color:var(--text);
   flex-shrink:0;
@@ -279,15 +305,15 @@ body{
 }
 
 .brand-dot{
-  width:36px;
-  height:36px;
-  border-radius:12px;
+  width:32px;
+  height:32px;
+  border-radius:10px;
   background:
     radial-gradient(circle at 30% 30%, rgba(255,255,255,.4), transparent 40%),
     linear-gradient(135deg, rgba(59,130,246,.95), rgba(99,102,241,.9), rgba(139,92,246,.85));
   box-shadow:
-    0 0 30px rgba(99,102,241,.5),
-    0 0 60px rgba(99,102,241,.25),
+    0 0 20px rgba(99,102,241,.6),
+    0 0 40px rgba(99,102,241,.3),
     inset 0 1px 2px rgba(255,255,255,.2);
   animation:pulse 3s ease-in-out infinite;
   position:relative;
@@ -297,11 +323,11 @@ body{
 @keyframes pulse{
   0%,100%{
     transform:scale(1);
-    box-shadow:0 0 30px rgba(99,102,241,.5), 0 0 60px rgba(99,102,241,.25);
+    box-shadow:0 0 20px rgba(99,102,241,.6), 0 0 40px rgba(99,102,241,.3);
   }
   50%{
     transform:scale(1.05);
-    box-shadow:0 0 50px rgba(99,102,241,.7), 0 0 80px rgba(99,102,241,.35);
+    box-shadow:0 0 35px rgba(99,102,241,.8), 0 0 60px rgba(99,102,241,.4);
   }
 }
 
@@ -324,7 +350,7 @@ body{
 .brand-name{
   font-weight:800;
   letter-spacing:-0.3px;
-  font-size:22px;
+  font-size:20px;
   background:linear-gradient(90deg, #fff 0%, #bfdbfe 100%);
   -webkit-background-clip:text;
   background-clip:text;
@@ -389,11 +415,11 @@ body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  width:44px;
-  height:44px;
-  border-radius:12px;
+  width:40px;
+  height:40px;
+  border-radius:10px;
   background:rgba(148,163,184,.1);
-  border:1px solid rgba(148,163,184,.15);
+  border:1px solid rgba(148,163,184,.2);
   cursor:pointer;
   z-index:60;
   transition:all 0.3s ease;
@@ -406,17 +432,17 @@ body{
 
 .menu-toggle span{
   display:block;
-  width:22px;
-  height:2.5px;
+  width:20px;
+  height:2px;
   background:linear-gradient(90deg, #fff, #cbd5e1);
   border-radius:3px;
   transition:all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   position:absolute;
 }
 
-.menu-toggle span:nth-child(1){top:14px;}
+.menu-toggle span:nth-child(1){top:13px;}
 .menu-toggle span:nth-child(2){top:50%;transform:translateY(-50%);}
-.menu-toggle span:nth-child(3){bottom:14px;}
+.menu-toggle span:nth-child(3){bottom:13px;}
 
 .menu-toggle.active span:nth-child(1){
   top:50%;
@@ -433,7 +459,7 @@ body{
   transform:translateY(50%) rotate(-45deg);
 }
 
-/* Mobile Navigation */
+/* Mobile Navigation - Full screen futuristic */
 .nav-mobile{
   display:none;
   position:fixed;
@@ -447,7 +473,7 @@ body{
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:16px;
+  gap:20px;
   opacity:0;
   pointer-events:none;
   transition:opacity 0.3s ease;
@@ -461,13 +487,15 @@ body{
 .nav-mobile a{
   color:#e2e8f0;
   text-decoration:none;
-  font-size:20px;
-  font-weight:600;
+  font-size:24px;
+  font-weight:700;
   padding:16px 32px;
   border-radius:16px;
   transition:all 0.3s ease;
   opacity:0;
   transform:translateY(20px);
+  background:linear-gradient(135deg, transparent, rgba(99,102,241,.1));
+  border:1px solid transparent;
 }
 
 .nav-mobile.active a{
@@ -482,16 +510,18 @@ body{
 
 .nav-mobile a:hover{
   color:#fff;
-  background:rgba(99,102,241,.15);
+  background:rgba(99,102,241,.2);
+  border-color:rgba(99,102,241,.3);
+  transform:translateY(-2px);
 }
 
 .mobile-buttons{
   display:flex;
   flex-direction:column;
   gap:12px;
-  margin-top:32px;
-  width:80%;
-  max-width:300px;
+  margin-top:40px;
+  width:85%;
+  max-width:320px;
   opacity:0;
   transform:translateY(20px);
   transition:all 0.3s ease 0.3s;
@@ -541,15 +571,15 @@ body{
 .btn-ghost{
   color:#e2e8f0;
   background:rgba(148,163,184,.08);
-  border-color:rgba(148,163,184,.12);
+  border-color:rgba(148,163,184,.15);
   backdrop-filter:blur(10px);
 }
 
 .btn-ghost:hover{
   background:rgba(148,163,184,.15);
-  border-color:rgba(148,163,184,.25);
+  border-color:rgba(148,163,184,.3);
   transform:translateY(-2px);
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 
 .btn-primary{
@@ -558,7 +588,7 @@ body{
   background-size:200% 200%;
   box-shadow:
     0 0 0 1px rgba(255,255,255,.1),
-    0 10px 30px rgba(99,102,241,.35),
+    0 10px 30px rgba(99,102,241,.4),
     inset 0 1px 1px rgba(255,255,255,.2);
   animation:gradientShift 3s ease infinite;
 }
@@ -572,7 +602,7 @@ body{
   transform:translateY(-2px) scale(1.02);
   box-shadow:
     0 0 0 1px rgba(255,255,255,.15),
-    0 15px 40px rgba(99,102,241,.5),
+    0 15px 40px rgba(99,102,241,.6),
     inset 0 1px 1px rgba(255,255,255,.25);
 }
 
@@ -588,7 +618,7 @@ body{
 
 /* ====== HERO SECTION ====== */
 .hero{
-  padding:80px 24px 60px;
+  padding:60px 20px 48px;
   position:relative;
   overflow:hidden;
 }
@@ -598,7 +628,7 @@ body{
   margin:0 auto;
   display:grid;
   grid-template-columns:1.1fr 0.9fr;
-  gap:64px;
+  gap:48px;
   align-items:center;
 }
 
@@ -612,10 +642,10 @@ body{
   font-size:13px;
   font-weight:500;
   background:
-    linear-gradient(135deg, rgba(59,130,246,.15), rgba(99,102,241,.1));
-  border:1px solid rgba(99,102,241,.25);
+    linear-gradient(135deg, rgba(59,130,246,.2), rgba(99,102,241,.15));
+  border:1px solid rgba(99,102,241,.3);
   box-shadow:
-    0 0 30px rgba(59,130,246,.2),
+    0 0 30px rgba(59,130,246,.3),
     inset 0 1px 1px rgba(255,255,255,.1);
   backdrop-filter:blur(10px);
   animation:glow 2s ease-in-out infinite alternate;
@@ -625,7 +655,7 @@ body{
 
 @keyframes glow{
   from{box-shadow:0 0 20px rgba(59,130,246,.2), inset 0 1px 1px rgba(255,255,255,.1);}
-  to{box-shadow:0 0 40px rgba(99,102,241,.4), inset 0 1px 1px rgba(255,255,255,.15);}
+  to{box-shadow:0 0 40px rgba(99,102,241,.5), inset 0 1px 1px rgba(255,255,255,.15);}
 }
 
 .pill-dot{
@@ -644,7 +674,7 @@ body{
 
 .h1{
   margin:0 0 20px 0;
-  font-size:clamp(40px, 5vw, 64px);
+  font-size:clamp(36px, 5vw, 64px);
   line-height:1.05;
   letter-spacing:-1.5px;
   font-weight:800;
@@ -705,16 +735,16 @@ body{
   font-size:13px;
   color:#e2e8f0;
   background:
-    linear-gradient(135deg, rgba(15,23,42,.6), rgba(2,6,23,.4));
-  border:1px solid rgba(148,163,184,.15);
+    linear-gradient(135deg, rgba(15,23,42,.7), rgba(2,6,23,.5));
+  border:1px solid rgba(148,163,184,.2);
   backdrop-filter:blur(10px);
   transition:all 0.3s ease;
 }
 
 .chip:hover{
   transform:translateY(-2px);
-  border-color:rgba(99,102,241,.3);
-  box-shadow:0 10px 30px rgba(0,0,0,.2);
+  border-color:rgba(99,102,241,.4);
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
 }
 
 .chip b{
@@ -725,17 +755,18 @@ body{
   background-clip:text;
 }
 
-/* Hero Preview Card */
+/* Hero Preview Card - Enhanced futuristic */
 .preview{
   position:relative;
-  border-radius:28px;
+  border-radius:24px;
   background:
-    linear-gradient(145deg, rgba(15,23,42,.9), rgba(2,6,23,.8));
-  border:1px solid rgba(148,163,184,.15);
+    linear-gradient(145deg, rgba(15,23,42,.95), rgba(2,6,23,.85));
+  border:1px solid rgba(99,102,241,.2);
   box-shadow:
-    0 0 0 1px rgba(99,102,241,.05),
+    0 0 0 1px rgba(99,102,241,.1),
     0 40px 100px rgba(0,0,0,.5),
-    0 0 60px rgba(99,102,241,.1);
+    0 0 60px rgba(99,102,241,.15),
+    inset 0 1px 1px rgba(255,255,255,.05);
   overflow:hidden;
   transform:perspective(1000px) rotateY(-5deg) rotateX(2deg);
   transition:all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -751,8 +782,9 @@ body{
   transform:perspective(1000px) rotateY(0deg) rotateX(0deg) translateY(-5px) scale(1.02);
   box-shadow:
     0 50px 100px rgba(0,0,0,.4),
-    0 0 0 1px rgba(99,102,241,.1),
-    0 0 80px rgba(99,102,241,.15);
+    0 0 0 1px rgba(99,102,241,.15),
+    0 0 80px rgba(99,102,241,.2),
+    inset 0 1px 1px rgba(255,255,255,.1);
 }
 
 .preview::before{
@@ -760,9 +792,9 @@ body{
   position:absolute;
   inset:-2px;
   background:
-    radial-gradient(800px 400px at 20% 10%, rgba(99,102,241,.3), transparent 60%),
-    radial-gradient(600px 400px at 80% 20%, rgba(56,189,248,.2), transparent 65%),
-    linear-gradient(120deg, rgba(59,130,246,.12), rgba(99,102,241,.1), rgba(139,92,246,.08));
+    radial-gradient(800px 400px at 20% 10%, rgba(99,102,241,.4), transparent 60%),
+    radial-gradient(600px 400px at 80% 20%, rgba(56,189,248,.25), transparent 65%),
+    linear-gradient(120deg, rgba(59,130,246,.15), rgba(99,102,241,.12), rgba(139,92,246,.1));
   opacity:1;
   animation:shimmerBg 8s ease-in-out infinite;
 }
@@ -774,7 +806,7 @@ body{
 
 .preview-inner{
   position:relative;
-  padding:28px;
+  padding:24px;
   background:
     linear-gradient(180deg, transparent 0%, rgba(2,6,23,.3) 100%);
 }
@@ -823,16 +855,16 @@ body{
   color:#e2e8f0;
   padding:10px 16px;
   border-radius:12px;
-  background:rgba(148,163,184,.08);
-  border:1px solid rgba(148,163,184,.12);
+  background:rgba(148,163,184,.1);
+  border:1px solid rgba(148,163,184,.15);
   backdrop-filter:blur(10px);
 }
 
 .mini-bar{
   height:10px;
   border-radius:999px;
-  background:rgba(148,163,184,.08);
-  border:1px solid rgba(148,163,184,.1);
+  background:rgba(148,163,184,.1);
+  border:1px solid rgba(148,163,184,.15);
   margin:14px 0 22px;
   position:relative;
   overflow:hidden;
@@ -843,15 +875,15 @@ body{
   position:absolute;
   inset:0;
   width:65%;
-  background:linear-gradient(90deg, rgba(59,130,246,.5), rgba(99,102,241,.5), rgba(139,92,246,.4));
-  box-shadow:0 0 30px rgba(99,102,241,.5);
+  background:linear-gradient(90deg, rgba(59,130,246,.6), rgba(99,102,241,.6), rgba(139,92,246,.5));
+  box-shadow:0 0 30px rgba(99,102,241,.6);
   border-radius:999px;
   animation:progressPulse 3s ease-in-out infinite;
 }
 
 @keyframes progressPulse{
-  0%,100%{opacity:0.8; box-shadow:0 0 20px rgba(99,102,241,.4);}
-  50%{opacity:1; box-shadow:0 0 40px rgba(99,102,241,.7);}
+  0%,100%{opacity:0.8; box-shadow:0 0 20px rgba(99,102,241,.5);}
+  50%{opacity:1; box-shadow:0 0 40px rgba(99,102,241,.8);}
 }
 
 .preview-grid{
@@ -863,8 +895,8 @@ body{
   padding:18px;
   border-radius:18px;
   background:
-    linear-gradient(135deg, rgba(2,6,23,.6), rgba(15,23,42,.4));
-  border:1px solid rgba(148,163,184,.1);
+    linear-gradient(135deg, rgba(2,6,23,.7), rgba(15,23,42,.5));
+  border:1px solid rgba(148,163,184,.15);
   backdrop-filter:blur(10px);
   transition:all 0.3s ease;
   position:relative;
@@ -885,7 +917,7 @@ body{
 
 .p-card:hover{
   transform:translateX(5px);
-  border-color:rgba(99,102,241,.2);
+  border-color:rgba(99,102,241,.3);
 }
 
 .p-card:hover::before{
@@ -913,9 +945,9 @@ body{
   padding:6px 12px;
   border-radius:999px;
   background:
-    linear-gradient(135deg, rgba(99,102,241,.2), rgba(59,130,246,.15));
-  border:1px solid rgba(99,102,241,.25);
-  box-shadow:0 0 20px rgba(99,102,241,.2);
+    linear-gradient(135deg, rgba(99,102,241,.25), rgba(59,130,246,.2));
+  border:1px solid rgba(99,102,241,.3);
+  box-shadow:0 0 20px rgba(99,102,241,.3);
   flex-shrink:0;
 }
 
@@ -936,16 +968,16 @@ body{
   padding:16px 12px;
   border-radius:14px;
   background:
-    linear-gradient(135deg, rgba(2,6,23,.5), rgba(15,23,42,.3));
-  border:1px solid rgba(148,163,184,.1);
+    linear-gradient(135deg, rgba(2,6,23,.6), rgba(15,23,42,.4));
+  border:1px solid rgba(148,163,184,.15);
   text-align:center;
   transition:all 0.3s ease;
 }
 
 .mini:hover{
   transform:translateY(-3px);
-  border-color:rgba(99,102,241,.15);
-  box-shadow:0 10px 25px rgba(0,0,0,.15);
+  border-color:rgba(99,102,241,.2);
+  box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
 
 .mini b{
@@ -967,7 +999,7 @@ body{
 
 /* ====== SECTIONS ====== */
 .sec{
-  padding:100px 24px;
+  padding:80px 20px;
   position:relative;
 }
 
@@ -979,7 +1011,7 @@ body{
   transform:translateX(-50%);
   width:200px;
   height:1px;
-  background:linear-gradient(90deg, transparent, rgba(99,102,241,.3), transparent);
+  background:linear-gradient(90deg, transparent, rgba(99,102,241,.4), transparent);
 }
 
 .sec-inner{
@@ -997,7 +1029,7 @@ body{
 
 .sec h2{
   margin:0;
-  font-size:clamp(32px, 4vw, 42px);
+  font-size:clamp(28px, 4vw, 42px);
   letter-spacing:-0.5px;
   font-weight:800;
   line-height:1.2;
@@ -1026,8 +1058,8 @@ body{
   padding:32px 28px;
   border-radius:24px;
   background:
-    linear-gradient(145deg, rgba(15,23,42,.8), rgba(2,6,23,.6));
-  border:1px solid rgba(148,163,184,.1);
+    linear-gradient(145deg, rgba(15,23,42,.9), rgba(2,6,23,.7));
+  border:1px solid rgba(99,102,241,.1);
   box-shadow:
     0 0 0 1px rgba(99,102,241,.05),
     0 20px 50px rgba(0,0,0,.3);
@@ -1050,11 +1082,11 @@ body{
 
 .f-card:hover{
   transform:translateY(-8px);
-  border-color:rgba(99,102,241,.2);
+  border-color:rgba(99,102,241,.25);
   box-shadow:
-    0 0 0 1px rgba(99,102,241,.1),
+    0 0 0 1px rgba(99,102,241,.15),
     0 30px 60px rgba(0,0,0,.4),
-    0 0 40px rgba(99,102,241,.1);
+    0 0 40px rgba(99,102,241,.15);
 }
 
 .f-card:hover::before{
@@ -1066,10 +1098,10 @@ body{
   height:52px;
   border-radius:16px;
   background:
-    linear-gradient(135deg, rgba(99,102,241,.15), rgba(59,130,246,.1));
-  border:1px solid rgba(99,102,241,.2);
+    linear-gradient(135deg, rgba(99,102,241,.2), rgba(59,130,246,.15));
+  border:1px solid rgba(99,102,241,.25);
   box-shadow:
-    0 0 30px rgba(99,102,241,.15),
+    0 0 30px rgba(99,102,241,.2),
     inset 0 1px 2px rgba(255,255,255,.1);
   display:flex;
   align-items:center;
@@ -1084,7 +1116,7 @@ body{
 .f-card:hover .f-icon{
   transform:scale(1.1) rotate(5deg);
   box-shadow:
-    0 0 40px rgba(99,102,241,.3),
+    0 0 40px rgba(99,102,241,.4),
     inset 0 1px 2px rgba(255,255,255,.15);
 }
 
@@ -1114,8 +1146,8 @@ body{
   padding:36px;
   border-radius:24px;
   background:
-    linear-gradient(145deg, rgba(15,23,42,.8), rgba(2,6,23,.6));
-  border:1px solid rgba(148,163,184,.1);
+    linear-gradient(145deg, rgba(15,23,42,.9), rgba(2,6,23,.7));
+  border:1px solid rgba(99,102,241,.1);
   box-shadow:
     0 0 0 1px rgba(99,102,241,.05),
     0 25px 60px rgba(0,0,0,.3);
@@ -1131,15 +1163,15 @@ body{
   left:0;
   right:0;
   height:100px;
-  background:linear-gradient(180deg, transparent, rgba(99,102,241,.03));
+  background:linear-gradient(180deg, transparent, rgba(99,102,241,.05));
   pointer-events:none;
 }
 
 .panel:hover{
   transform:translateY(-5px);
-  border-color:rgba(99,102,241,.15);
+  border-color:rgba(99,102,241,.2);
   box-shadow:
-    0 0 0 1px rgba(99,102,241,.08),
+    0 0 0 1px rgba(99,102,241,.1),
     0 35px 70px rgba(0,0,0,.35);
 }
 
@@ -1198,9 +1230,9 @@ body{
   border-radius:99px;
   margin-top:6px;
   background:
-    linear-gradient(135deg, rgba(99,102,241,.3), rgba(59,130,246,.2));
-  border:1px solid rgba(99,102,241,.3);
-  box-shadow:0 0 15px rgba(99,102,241,.3);
+    linear-gradient(135deg, rgba(99,102,241,.4), rgba(59,130,246,.3));
+  border:1px solid rgba(99,102,241,.4);
+  box-shadow:0 0 15px rgba(99,102,241,.4);
   flex:0 0 auto;
   position:relative;
 }
@@ -1226,8 +1258,8 @@ body{
   padding:28px;
   border-radius:24px;
   background:
-    linear-gradient(145deg, rgba(15,23,42,.75), rgba(2,6,23,.55));
-  border:1px solid rgba(148,163,184,.08);
+    linear-gradient(145deg, rgba(15,23,42,.85), rgba(2,6,23,.65));
+  border:1px solid rgba(99,102,241,.08);
   box-shadow:0 20px 50px rgba(0,0,0,.25);
   transition:all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position:relative;
@@ -1239,7 +1271,7 @@ body{
   top:20px;
   right:28px;
   font-size:80px;
-  color:rgba(99,102,241,.08);
+  color:rgba(99,102,241,.1);
   font-weight:800;
   line-height:1;
   font-family:Georgia, serif;
@@ -1247,7 +1279,7 @@ body{
 
 .r-card:hover{
   transform:translateY(-5px);
-  border-color:rgba(99,102,241,.15);
+  border-color:rgba(99,102,241,.2);
   box-shadow:0 30px 60px rgba(0,0,0,.35);
 }
 
@@ -1272,9 +1304,9 @@ body{
   border-radius:14px;
   background:linear-gradient(135deg, rgba(59,130,246,.9), rgba(99,102,241,.85), rgba(139,92,246,.8));
   box-shadow:
-    0 0 25px rgba(99,102,241,.3),
+    0 0 25px rgba(99,102,241,.4),
     inset 0 1px 2px rgba(255,255,255,.2);
-  border:1px solid rgba(148,163,184,.15);
+  border:1px solid rgba(148,163,184,.2);
   position:relative;
   overflow:hidden;
 }
@@ -1308,8 +1340,8 @@ body{
   padding:8px 14px;
   border-radius:999px;
   background:
-    linear-gradient(135deg, rgba(99,102,241,.1), rgba(59,130,246,.08));
-  border:1px solid rgba(99,102,241,.2);
+    linear-gradient(135deg, rgba(99,102,241,.15), rgba(59,130,246,.12));
+  border:1px solid rgba(99,102,241,.25);
   color:#bfdbfe;
   text-transform:uppercase;
   letter-spacing:0.5px;
@@ -1326,15 +1358,15 @@ body{
 
 /* ====== CTA STRIP ====== */
 .cta-strip{
-  margin:100px auto;
+  margin:80px auto;
   max-width:1200px;
   padding:48px;
   border-radius:32px;
   background:
-    linear-gradient(135deg, rgba(30,58,138,.6), rgba(15,23,42,.85));
-  border:1px solid rgba(99,102,241,.2);
+    linear-gradient(135deg, rgba(30,58,138,.7), rgba(15,23,42,.9));
+  border:1px solid rgba(99,102,241,.25);
   box-shadow:
-    0 0 0 1px rgba(99,102,241,.1),
+    0 0 0 1px rgba(99,102,241,.15),
     0 40px 100px rgba(0,0,0,.4),
     inset 0 1px 1px rgba(255,255,255,.05);
   display:flex;
@@ -1352,7 +1384,7 @@ body{
   left:-50%;
   width:200%;
   height:200%;
-  background:radial-gradient(circle, rgba(99,102,241,.1), transparent 70%);
+  background:radial-gradient(circle, rgba(99,102,241,.15), transparent 70%);
   animation:rotate 20s linear infinite;
 }
 
@@ -1392,10 +1424,10 @@ body{
 
 /* ====== FOOTER ====== */
 .footer-space{
-  height:60px;
+  height:40px;
 }
 
-/* ====== RESPONSIVE ====== */
+/* ====== RESPONSIVE - Mobile First Optimization ====== */
 @media(max-width:1024px){
   .nav-desktop{
     display:none;
@@ -1411,7 +1443,7 @@ body{
   
   .hero-inner{
     grid-template-columns:1fr;
-    gap:48px;
+    gap:40px;
     text-align:center;
   }
   
@@ -1429,7 +1461,7 @@ body{
   
   @keyframes levitateTablet{
     0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-15px);}
+    50%{transform:translateY(-10px);}
   }
   
   .lead{
@@ -1476,35 +1508,62 @@ body{
 }
 
 @media(max-width:768px){
+  body{
+    background:
+      radial-gradient(800px 600px at 0% 0%, rgba(99,102,241,.4), transparent 60%),
+      radial-gradient(600px 500px at 100% 0%, rgba(56,189,248,.3), transparent 55%),
+      radial-gradient(600px 500px at 100% 100%, rgba(139,92,246,.25), transparent 50%),
+      radial-gradient(500px 400px at 0% 100%, rgba(30,58,138,.35), transparent 50%),
+      linear-gradient(180deg, #030712 0%, #020617 50%, #01040f 100%);
+    background-attachment:fixed;
+  }
+  
   .hero{
-    padding:60px 20px 48px;
+    padding:40px 16px 32px;
   }
   
   .h1{
-    font-size:36px;
+    font-size:32px;
+    letter-spacing:-1px;
   }
   
   .lead{
     font-size:16px;
+    line-height:1.7;
   }
   
   .hero-actions{
     flex-direction:column;
     width:100%;
+    gap:12px;
   }
   
   .hero-actions .btn{
     width:100%;
+    padding:16px 24px;
   }
   
   .meta-row{
     flex-direction:column;
     width:100%;
+    gap:10px;
   }
   
   .chip{
     width:100%;
     justify-content:center;
+    padding:14px 18px;
+  }
+  
+  .pill{
+    margin:0 auto 20px;
+    font-size:12px;
+    padding:8px 16px;
+  }
+  
+  .preview{
+    border-radius:20px;
+    margin:0 -4px;
   }
   
   .preview-inner{
@@ -1513,6 +1572,7 @@ body{
   
   .mini-metrics{
     grid-template-columns:1fr;
+    gap:10px;
   }
   
   .mini{
@@ -1525,73 +1585,134 @@ body{
   
   .mini b{
     margin-bottom:0;
+    font-size:16px;
+  }
+  
+  .mini span{
+    font-size:13px;
+    text-align:right;
   }
   
   .sec{
-    padding:80px 20px;
+    padding:60px 16px;
+  }
+  
+  .sec-head{
+    text-align:center;
+    align-items:center;
+  }
+  
+  .sec h2{
+    font-size:26px;
   }
   
   .feature-grid{
     grid-template-columns:1fr;
+    gap:16px;
   }
   
   .f-card{
-    padding:28px 24px;
+    padding:24px 20px;
+    border-radius:20px;
+  }
+  
+  .f-icon{
+    width:48px;
+    height:48px;
+    font-size:18px;
+  }
+  
+  .f-title{
+    font-size:18px;
+  }
+  
+  .f-desc{
+    font-size:14px;
   }
   
   .reviews{
     grid-template-columns:1fr;
+    gap:16px;
   }
   
   .r-card{
-    padding:24px;
+    padding:24px 20px;
+    border-radius:20px;
+  }
+  
+  .r-text{
+    font-size:14px;
+  }
+  
+  .panel{
+    padding:28px 24px;
+    border-radius:20px;
+  }
+  
+  .panel h3{
+    font-size:20px;
+  }
+  
+  .panel p, .bullets li{
+    font-size:14px;
   }
   
   .cta-strip{
-    margin:60px 20px;
+    margin:60px 16px;
     padding:32px 24px;
+    border-radius:24px;
   }
   
   .cta-strip h3{
-    font-size:24px;
+    font-size:22px;
+  }
+  
+  .cta-strip p{
+    font-size:14px;
   }
   
   .cta-buttons{
     flex-direction:column;
     width:100%;
+    gap:12px;
   }
   
   .cta-buttons .btn{
     width:100%;
+    padding:16px 24px;
   }
-}
-
-@media(max-width:480px){
+  
   .nav-inner{
     padding:0 16px;
-    height:64px;
+    height:60px;
   }
   
   .brand-dot{
-    width:32px;
-    height:32px;
+    width:28px;
+    height:28px;
   }
   
   .brand-name{
     font-size:18px;
   }
-  
+}
+
+@media(max-width:480px){
   .h1{
-    font-size:32px;
+    font-size:28px;
+  }
+  
+  .lead{
+    font-size:15px;
   }
   
   .chip{
     font-size:12px;
-    padding:10px 14px;
+    padding:12px 16px;
   }
   
   .p-card{
-    padding:14px;
+    padding:16px;
   }
   
   .p-head{
@@ -1607,33 +1728,29 @@ body{
     font-size:12px;
   }
   
-  .f-title{
-    font-size:18px;
-  }
-  
-  .f-desc{
-    font-size:14px;
-  }
-  
-  .panel{
-    padding:28px 24px;
-  }
-  
-  .panel h3{
-    font-size:20px;
-  }
-  
-  .panel p, .bullets li{
-    font-size:14px;
-  }
-  
   .r-name{
     font-size:14px;
   }
   
-  .r-text{
-    font-size:14px;
+  .r-loc{
+    font-size:12px;
   }
+  
+  .r-tag{
+    font-size:10px;
+    padding:6px 12px;
+  }
+  
+  .orb{
+    filter:blur(40px);
+    opacity:0.4;
+  }
+  
+  .orb-1{width:300px;height:300px;}
+  .orb-2{width:250px;height:250px;}
+  .orb-3{width:280px;height:280px;}
+  .orb-4{width:200px;height:200px;}
+  .orb-5{width:220px;height:220px;}
 }
 
 /* Focus visible */
@@ -1650,6 +1767,14 @@ a:focus-visible{
     animation-duration:0.01ms !important;
     animation-iteration-count:1 !important;
     transition-duration:0.01ms !important;
+  }
+}
+
+/* Safe area support for notched phones */
+@supports(padding:max(0px)){
+  body{
+    padding-left:max(0px, env(safe-area-inset-left));
+    padding-right:max(0px, env(safe-area-inset-right));
   }
 }
 </style>
@@ -1676,9 +1801,15 @@ a:focus-visible{
   <div class="particle"></div>
   <div class="particle"></div>
   <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
 </div>
 
 <div class="noise"></div>
+<div class="grid-overlay"></div>
 
 <!-- Navigation -->
 <header class="nav" id="navbar">
@@ -1693,7 +1824,7 @@ a:focus-visible{
       <nav class="nav-links">
         <a href="#kak">Как работи</a>
         <a href="#funkcii">Функции</a>
-        <a href="#analitika">Аналитика</a>
+        <a href="#analiz">Анализ</a>
         <a href="#otzivi">Отзиви</a>
       </nav>
       <div class="nav-buttons">
@@ -1715,7 +1846,7 @@ a:focus-visible{
   <div class="nav-mobile" id="navMobile">
     <a href="#kak" onclick="closeMenu()">Как работи</a>
     <a href="#funkcii" onclick="closeMenu()">Функции</a>
-    <a href="#analitika" onclick="closeMenu()">Аналитика</a>
+    <a href="#analiz" onclick="closeMenu()">Анализ</a>
     <a href="#otzivi" onclick="closeMenu()">Отзиви</a>
     <div class="mobile-buttons">
       <a class="btn btn-primary btn-large" href="/signup" onclick="closeMenu()">Регистрация</a>
@@ -1731,10 +1862,10 @@ a:focus-visible{
     <div class="reveal-left">
       <div class="pill"><span class="pill-dot"></span> Оферти за минути, не за часове</div>
       <h1 class="h1">
-        Оферти с <span class="grad">точни разходи</span> и ясна печалба.
+        Оферти с <span class="grad">точни разходи</span> и ясен приход.
       </h1>
       <p class="lead">
-        TavSoft е интелигентен калкулатор за майстори и строителни фирми. Изчислява разходите за материали и труд, показва реалната печалба преди да изпратите офертата и генерира професионално съобщение за клиента само с едно кликване.
+        TavSoft е интелигентен калкулатор за майстори и строителни фирми. Изчислява разходите за материали и труд, показва реалния приход преди да изпратите офертата и генерира професионално оформено съобщение за клиента само с едно кликване.
       </p>
       <div class="hero-actions">
         <a class="btn btn-primary btn-large" href="/signup">Започни безплатно</a>
@@ -1742,7 +1873,7 @@ a:focus-visible{
       </div>
       <div class="meta-row">
         <span class="chip"><b>2-5 мин</b> за пълна оферта</span>
-        <span class="chip"><b>Ясен марж</b> преди изпращане</span>
+        <span class="chip"><b>Ясен приход</b> преди изпращане</span>
         <span class="chip"><b>Готово съобщение</b> с един клик</span>
       </div>
     </div>
@@ -1759,11 +1890,11 @@ a:focus-visible{
         <div class="preview-grid">
           <div class="p-card">
             <div class="p-row">
-              <div class="p-head">Печалба под контрол</div>
+              <div class="p-head">Приход под контрол</div>
               <div class="badge">Видим марж</div>
             </div>
             <div class="p-text">
-              Вижте точната печалба още преди да изпратите офертата. Никакви изненади след започване на проекта.
+              Вижте точния приход още преди да изпратите офертата. Никакви изненади след започване на проекта.
             </div>
           </div>
           <div class="p-card">
@@ -1778,8 +1909,8 @@ a:focus-visible{
         </div>
         <div class="mini-metrics">
           <div class="mini"><b>2-5 мин</b><span>средно време за оферта</span></div>
-          <div class="mini"><b>100%</b><span>видимост на маржа</span></div>
-          <div class="mini"><b>Аналитика</b><span>за бизнес решения</span></div>
+          <div class="mini"><b>100%</b><span>видимост на прихода</span></div>
+          <div class="mini"><b>Анализ</b><span>за бизнес решения</span></div>
         </div>
       </div>
     </div>
@@ -1814,7 +1945,7 @@ a:focus-visible{
       </div>
       <div class="f-card reveal delay-3">
         <div class="f-icon">03</div>
-        <div class="f-title">Печалба под контрол</div>
+        <div class="f-title">Приход под контрол</div>
         <p class="f-desc">
           Марж, резерв и непредвидени разходи - всичко е сметнато, за да не работите на загуба или "на нула".
         </p>
@@ -1824,11 +1955,11 @@ a:focus-visible{
 </section>
 
 <!-- Analytics Section -->
-<section class="sec" id="analitika">
+<section class="sec" id="analiz">
   <div class="sec-inner">
     <div class="sec-head reveal">
       <div>
-        <h2>Аналитика и автоматизация</h2>
+        <h2>Анализ и автоматизация</h2>
       </div>
       <p class="top-note">
         Структура, проследимост и ясна картина какво работи. Разликата между хаотични оферти и истинска бизнес система.
@@ -1836,20 +1967,20 @@ a:focus-visible{
     </div>
     <div class="two">
       <div class="panel reveal-left delay-1">
-        <h3>Детайлна аналитика</h3>
+        <h3>Детайлен анализ</h3>
         <p>
-          Проследявайте историята на всички оферти, идентифицирайте повтарящи се стойности и откривайте къде точно се губи печалба. Вземайте информирани решения за ценообразуването.
+          Проследявайте историята на всички оферти, идентифицирайте повтарящи се стойности и откривайте къде точно се губи приход. Вземайте информирани решения за ценообразуването.
         </p>
         <ul class="bullets">
           <li><span class="b-dot"></span>Пълна история на оферти с детайлно сравнение</li>
           <li><span class="b-dot"></span>Сегментиране по тип работа, клиент или сложност</li>
-          <li><span class="b-dot"></span>Ясни данни за оптимизиране на цените и маржа</li>
+          <li><span class="b-dot"></span>Ясни данни за оптимизиране на цените и прихода</li>
         </ul>
       </div>
       <div class="panel reveal-right delay-2">
         <h3>Готово съобщение с един клик</h3>
         <p>
-          При финализиране на офертата системата автоматично генерира професионален текст за имейл или съобщение. По-бърз отговор, по-малко празни разговори и повече спечелени клиенти.
+          При финализиране на офертата системата автоматично генерира професионално оформен текст за имейл или съобщение. По-бърз отговор, по-малко празни разговори и повече спечелени клиенти.
         </p>
         <ul class="bullets">
           <li><span class="b-dot"></span>Бутон за генериране на съобщение в края на процеса</li>
@@ -1885,7 +2016,7 @@ a:focus-visible{
           <div class="r-tag">Структура</div>
         </div>
         <p class="r-text">
-          Най-голямата полза е, че маржът се вижда веднага. Спряхме да изпращаме оферти "на око" и започнахме да печелим повече от всяка работа.
+          Най-голямата полза е, че приходът се вижда веднага. Спряхме да изпращаме оферти "на око" и започнахме да печелим повече от всяка работа.
         </p>
       </div>
       <div class="r-card reveal delay-2">
@@ -1947,7 +2078,7 @@ a:focus-visible{
       <div class="f-card reveal-scale delay-3">
         <div class="f-icon">03</div>
         <div class="f-title">Изпращате към клиента</div>
-        <p class="f-desc">Генерира се професионално съобщение с цялата информация, готово за изпращане.</p>
+        <p class="f-desc">Генерира се професионално оформено съобщение с цялата информация, готово за изпращане.</p>
       </div>
     </div>
   </div>
@@ -2059,6 +2190,16 @@ window.addEventListener('resize', function() {
   if (window.innerWidth > 1024) {
     closeMenu();
   }
+});
+
+// Add touch feedback for mobile buttons
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('touchstart', function() {
+    this.style.transform = 'scale(0.98)';
+  });
+  btn.addEventListener('touchend', function() {
+    this.style.transform = '';
+  });
 });
 </script>
 
